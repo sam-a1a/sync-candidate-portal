@@ -4,6 +4,7 @@ import type { StringKey } from './i18n/strings'
 import { NavRail } from './components/NavRail'
 import { NavBar } from './components/NavBar'
 import { useCompact } from './components/useCompact'
+import { usePersistentState } from './components/usePersistentState'
 import { PageTransition } from './components/PageTransition'
 import { DESTINATIONS, UTILITIES } from './app/navigation'
 import { ProfilePage } from './features/profile/ProfilePage'
@@ -103,11 +104,14 @@ function App() {
    * Which entry is expanded, per tab. Up here rather than inside each panel
    * because a panel unmounts when you change tab — held locally, a collapsed
    * entry sprang back open the moment you left and returned.
+   *
+   * Nothing starts open. A form you did not ask for is scrolling you did not
+   * ask for, and on a phone one expanded entry is most of the screen. What you
+   * do open is remembered across reloads.
    */
-  const [openPanels, setOpenPanels] = useState<Record<string, string | null>>({
-    experience: 'e1',
-    education: 'd1',
-  })
+  const [openPanels, setOpenPanels] = usePersistentState<
+    Record<string, string | null>
+  >('profile-open-panels', {})
 
   const change = (patch: Partial<Profile>) => {
     setProfile((current) => ({ ...current, ...patch }))

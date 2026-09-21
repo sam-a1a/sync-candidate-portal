@@ -29,6 +29,14 @@
     font-weight: var(--md-sys-typescale-label-large-weight);
     letter-spacing: var(--md-sys-typescale-label-large-tracking);
 
+    /*
+     * A label never wraps. The height is fixed at 40px, so a label that broke
+     * onto three lines spilled out of the box and the outline was drawn
+     * straight through the words — it read as struck-through text. If there is
+     * no room for the button, the row it sits in wraps instead.
+     */
+    white-space: nowrap;
+
     background: none;
     color: inherit;
     text-decoration: none;

@@ -411,6 +411,45 @@
     color: var(--md-sys-color-on-surface-variant);
   }
 
+  /*
+   * Compact: the stage and Withdraw drop to a second row.
+   *
+   * Four things across 358px left the title about 110, and "Data Analyst —
+   * Programmes" came out one word per line. The title gets the full width and
+   * the two controls share the row under it.
+   */
+  @media (max-width: 599px) {
+    .application {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-areas:
+        'logo  text  text'
+        'stage stage draw';
+      align-items: center;
+      gap: 14px 12px;
+      padding: 14px 16px;
+    }
+
+    .applications__logo {
+      grid-area: logo;
+      align-self: start;
+    }
+
+    .application__text {
+      grid-area: text;
+    }
+
+    .application__stage {
+      grid-area: stage;
+      justify-self: start;
+    }
+
+    .application > .md-button {
+      grid-area: draw;
+      justify-self: end;
+    }
+  }
+
   /* --- The empty state (draft B) --- */
 
   .applications__empty {

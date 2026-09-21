@@ -508,6 +508,53 @@
       grid-template-columns: minmax(0, 1fr);
       row-gap: 28px;
     }
+
+    /*
+     * The section's action drops below its heading rather than being squeezed
+     * beside it. "Add another skill" needs ~170px; next to a two-line blurb
+     * there were 90, and the label wrapped through its own outline.
+     */
+    .profile__section-head {
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-block-end: 24px;
+    }
+
+    .profile__section-head > .md-button {
+      margin-inline-start: auto;
+    }
+
+    /*
+     * A language is a name, a level and a way to remove it. On one row the
+     * level had ~120px for five options; given its own row it has the width.
+     */
+    .profile__languages li {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        'name remove'
+        'level level';
+      align-items: center;
+      gap: 12px 8px;
+      padding: 12px;
+    }
+
+    .profile__languages li:has(.profile__empty) {
+      display: block;
+    }
+
+    .profile__language-name {
+      grid-area: name;
+      inline-size: auto;
+    }
+
+    .profile__languages li > .md-segmented {
+      grid-area: level;
+    }
+
+    .profile__languages li > .md-icon-button {
+      grid-area: remove;
+    }
   }
 }
 
@@ -779,5 +826,86 @@
     display: flex;
     justify-content: flex-end;
     gap: 8px;
+  }
+
+  /*
+   * Compact: the read is a full screen, not a 760px card cropped to 342.
+   *
+   * The two columns of found sections, the three steps with their connectors
+   * and the header's 52px mark were all drawn for a width that is not there.
+   * Full bleed gives the detail lines room to be read rather than hyphenated.
+   */
+  @media (max-width: 599px) {
+    .reading {
+      inline-size: 100vw;
+      max-inline-size: none;
+      block-size: 100svh;
+      border-radius: 0;
+      padding: 12px 16px calc(20px + env(safe-area-inset-bottom));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+
+    .reading__head {
+      gap: 12px;
+      margin-block-end: 18px;
+    }
+
+    .reading__mark {
+      inline-size: 44px;
+      block-size: 44px;
+    }
+
+    .reading__head h2 {
+      font-size: var(--md-sys-typescale-title-medium-size);
+      line-height: var(--md-sys-typescale-title-medium-line-height);
+    }
+
+    /* Three steps and two connectors, at a size that fits the line. */
+    .reading__steps {
+      flex-wrap: wrap;
+      gap: 8px;
+      row-gap: 10px;
+      margin-block-end: 16px;
+      font-size: var(--md-sys-typescale-body-small-size);
+    }
+
+    .reading__steps li {
+      gap: 8px;
+      font-size: var(--md-sys-typescale-body-small-size);
+    }
+
+    .reading__steps li:not(:last-child)::after {
+      inline-size: 12px;
+    }
+
+    .reading__tick {
+      inline-size: 20px;
+      block-size: 20px;
+    }
+
+    .reading__found {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .reading__actions {
+      margin-block-start: 20px;
+      padding-block-start: 16px;
+    }
+
+    /*
+     * Stacked, and reversed so the thing you came here to decide is the one
+     * under your thumb.
+     */
+    .reading__actions div {
+      flex-direction: column-reverse;
+      gap: 10px;
+    }
+
+    .reading__actions div > .md-button {
+      inline-size: 100%;
+      block-size: 48px;
+    }
   }
 }

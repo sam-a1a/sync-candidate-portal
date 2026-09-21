@@ -263,6 +263,41 @@
     color: var(--md-sys-color-on-surface);
   }
 
+  /*
+   * A label never wraps and never spills into its neighbour. With flex-basis 0
+   * and five options — Beginner to Native — a narrow control gave each one
+   * about 40px, and the words were painted on top of each other.
+   */
+  .md-segmented__option {
+    padding-inline: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /*
+   * Compact: the options keep their own width and the control scrolls. Five
+   * proficiency levels cannot share 320px legibly, and an ellipsis on every
+   * one of them names none of them.
+   */
+  @media (max-width: 599px) {
+    .md-segmented {
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scrollbar-width: none;
+    }
+
+    .md-segmented::-webkit-scrollbar {
+      display: none;
+    }
+
+    .md-segmented__option {
+      flex: none;
+      padding-inline: 14px;
+      overflow: visible;
+    }
+  }
+
   /* --- Switch --- */
 
   .md-switch {

@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useMemo, useRef, useState } from 'react'
+import { usePersistentState } from '../../components/usePersistentState'
 import { Button } from '../../components/Button'
 import { Dialog } from '../../components/Dialog'
 import { Switch } from '../../components/Field'
@@ -88,7 +89,7 @@ export function ProfilePage({
 }) {
   const t = useT()
   const [active, setActive] = useState('about')
-  const [showLeft, setShowLeft] = useState(false)
+  const [showLeft, setShowLeft] = usePersistentState('profile-whats-left', false)
   const [askingFor, setAskingFor] = useState<Cv | null>(null)
   const file = useRef<HTMLInputElement>(null)
 
