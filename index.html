@@ -1,0 +1,78 @@
+<!doctype html>
+<!--
+  lang/dir are placeholders: the inline script below overwrites them from the
+  stored preference before first paint.
+-->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/sync-candidate-portal/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Kept in step with --md-sys-color-surface by applyTheme(). -->
+    <meta name="theme-color" content="#f4fbf9" />
+
+    <!--
+      The faces are imported from src/fonts, so the bundler fingerprints them
+      and writes whatever base the site is served from. That also means their
+      final URL is not known here, which is why there is no preload: the
+      stylesheet asks for the Latin face on the first paint either way.
+    -->
+
+    <!--
+      Resolve the theme before first paint.
+
+      This must stay inline and synchronous: any deferred script runs after the
+      first paint, which is exactly the flash of the wrong scheme it exists to
+      prevent. It duplicates the small amount of logic in src/theme/theme.ts on
+      purpose - importing a module here would defeat the point.
+
+      Keep the storage keys in sync with STORAGE_KEYS in src/theme/theme.ts.
+    -->
+    <script>
+      ;(function () {
+        try {
+          var read = function (key, allowed, fallback) {
+            var value = localStorage.getItem(key)
+            return allowed.indexOf(value) !== -1 ? value : fallback
+          }
+          var mode = read('md-theme-mode', ['light', 'dark', 'system'], 'system')
+          var contrast = read(
+            'md-theme-contrast',
+            ['standard', 'medium', 'high', 'system'],
+            'system',
+          )
+          var language = read('md-theme-language', ['en', 'ar'], 'en')
+          var root = document.documentElement
+
+          root.dataset.theme =
+            mode === 'system'
+              ? matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light'
+              : mode
+
+          root.dataset.contrast =
+            contrast === 'system'
+              ? matchMedia('(prefers-contrast: more)').matches
+                ? 'high'
+                : 'standard'
+              : contrast
+
+          root.lang = language
+          root.dir = language === 'ar' ? 'rtl' : 'ltr'
+        } catch (e) {
+          // Storage blocked. The CSS defaults plus the prefers-color-scheme
+          // fallback in tokens/color.css still render a correct scheme.
+        }
+      })()
+    </script>
+
+    <title>sync-jobs-2</title>
+    <script type="module" crossorigin src="/sync-candidate-portal/assets/index-DizQl2NP.js"></script>
+    <link rel="stylesheet" crossorigin href="/sync-candidate-portal/assets/index-Cbufa_He.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
