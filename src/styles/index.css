@@ -1,0 +1,96 @@
+/*
+ * Material 3 Expressive design system - entry point.
+ *
+ *   fonts.css        @font-face + the two reference typefaces
+ *   tokens/color     49 colour roles x 6 schemes  (GENERATED)
+ *   tokens/typography  the 15 + 15 Expressive type styles
+ *   tokens/shape     corner scale
+ *   tokens/elevation tonal ladder + shadow recipes
+ *   tokens/motion    easings, durations, springs  (springs GENERATED)
+ *   tokens/state     state layer opacities
+ *   theme.css        exposes all of the above as Tailwind utilities
+ *   base.css         element defaults
+ *   utilities.css    state layers, elevation, spring and type-motion harnesses
+ *
+ * The scheme in effect is chosen by two attributes on <html>, written by
+ * src/theme/ThemeProvider.tsx:
+ *
+ *   data-theme="light | dark"
+ *   data-contrast="standard | medium | high"
+ *
+ * Because every role is redefined per scheme, components written against the
+ * roles need no dark-mode branch at all - `bg-surface text-on-surface` is
+ * already correct in all six schemes.
+ */
+
+@import 'tailwindcss';
+
+@import './fonts.css';
+@import './tokens/color.css';
+@import './tokens/typography.css';
+@import './tokens/shape.css';
+@import './tokens/elevation.css';
+@import './tokens/motion.css';
+@import './tokens/state.css';
+@import './theme.css';
+@import './base.css';
+@import './components/icon.css';
+@import './components/button.css';
+@import './components/field.css';
+@import './components/tabs.css';
+@import './components/expansion-panel.css';
+@import './components/dialog.css';
+@import './components/wavy-progress.css';
+@import './components/nav-rail.css';
+@import './components/profile.css';
+@import './components/jobs.css';
+@import './components/job-detail.css';
+@import './components/notifications.css';
+@import './components/account.css';
+@import './components/page-transition.css';
+@import './components/theme-transition.css';
+@import './utilities.css';
+
+/*
+ * `dark:` should be rare here - the colour roles already handle the scheme.
+ * Keep it for the cases roles genuinely cannot express, such as swapping an
+ * asset or dropping a shadow that only reads on a light background.
+ *
+ * Two arms: the attribute ThemeProvider writes, and the OS preference for the
+ * pre-hydration and no-JS case, matching the fallback in tokens/color.css.
+ */
+@custom-variant dark {
+  &:where([data-theme='dark'], [data-theme='dark'] *) {
+    @slot;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme]), :root:not([data-theme]) *) {
+      @slot;
+    }
+  }
+}
+
+/* Contrast level, for the occasional affordance that needs to get sturdier. */
+@custom-variant contrast-medium {
+  &:where([data-contrast='medium'], [data-contrast='medium'] *) {
+    @slot;
+  }
+}
+
+@custom-variant contrast-high {
+  &:where([data-contrast='high'], [data-contrast='high'] *) {
+    @slot;
+  }
+}
+
+/*
+ * Writing direction. Prefer logical properties (`ps-4`, `border-s`, `text-start`)
+ * over these - they need no variant at all. Reach for `rtl:` only when a rule
+ * genuinely has no logical equivalent, such as mirroring a directional icon.
+ */
+@custom-variant rtl (&:where([dir='rtl'], [dir='rtl'] *));
+@custom-variant ltr (&:where([dir='ltr'], [dir='ltr'] *));
+
+/* Arabic, regardless of direction - the type scale is retuned per script. */
+@custom-variant ar (&:where(:lang(ar), :lang(ar) *));

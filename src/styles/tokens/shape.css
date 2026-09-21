@@ -1,0 +1,24 @@
+/*
+ * Material 3 Expressive shape scale.
+ *
+ * The three `-increased` / `extra-extra-large` steps are Expressive additions:
+ * the update pushed corner radii up and made shape a way to distinguish
+ * components rather than a uniform rounding.
+ *
+ * Use the token, never a literal radius - shape morphing on interaction
+ * (tokens/motion.css) interpolates between two of these steps, and that only
+ * stays coherent if every component is anchored to the scale.
+ */
+
+:root {
+  --md-sys-shape-corner-none: 0px;
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-large-increased: 20px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-extra-large-increased: 32px;
+  --md-sys-shape-corner-extra-extra-large: 48px;
+  --md-sys-shape-corner-full: 9999px;
+}

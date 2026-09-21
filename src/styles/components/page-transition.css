@@ -1,0 +1,27 @@
+/*
+ * Stacking for the page cross-dissolve.
+ *
+ * The timing lives in PageTransition.tsx - Motion drives the opacity. All this
+ * does is put the outgoing and incoming pages in the same place.
+ *
+ * A single-cell grid rather than absolute positioning: both layers are placed
+ * in cell 1/1, so they overlap, but they still contribute their height to the
+ * container. Absolutely positioning them would take them out of flow and
+ * collapse the main area to zero height for the length of every transition.
+ */
+
+@layer components {
+  .page-transition {
+    display: grid;
+  }
+
+  .page-transition__layer {
+    grid-area: 1 / 1;
+    /*
+     * A grid item's automatic minimum size is its content, which stops long
+     * unbreakable content (a wide table, a long URL) from shrinking and blows
+     * the layout out sideways instead.
+     */
+    min-inline-size: 0;
+  }
+}

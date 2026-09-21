@@ -1,0 +1,536 @@
+/*
+ * Jobs listing (draft C) and Applications (draft B).
+ *
+ * They share the employer mark and the page header shape, so they share a
+ * file rather than repeating both.
+ */
+
+@layer components {
+  .jobs,
+  .applications {
+    inline-size: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* --- Page headers --- */
+
+  .jobs__header,
+  .applications__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 32px;
+    margin-block-end: 24px;
+  }
+
+  .jobs__header h1,
+  .applications__header h1 {
+    margin: 0;
+    font-family: var(--md-sys-typescale-headline-medium-font);
+    font-size: var(--md-sys-typescale-headline-medium-size);
+    line-height: var(--md-sys-typescale-headline-medium-line-height);
+    font-weight: var(--md-sys-typescale-headline-medium-weight);
+    letter-spacing: var(--md-sys-typescale-headline-medium-tracking);
+  }
+
+  .jobs__header p,
+  .applications__header p {
+    margin: 4px 0 0;
+    font-size: var(--md-sys-typescale-body-medium-size);
+    line-height: var(--md-sys-typescale-body-medium-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  /* --- Filters --- */
+
+  .jobs__filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .jobs__search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-grow: 1;
+    min-inline-size: 300px;
+    block-size: 52px;
+    padding-inline: 18px;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-surface-container-high);
+    color: var(--md-sys-color-on-surface-variant);
+
+    transition: box-shadow var(--md-sys-motion-duration-short4)
+      var(--md-sys-motion-easing-standard);
+  }
+
+  .jobs__search:focus-within {
+    box-shadow: inset 0 0 0 2px var(--md-sys-color-primary);
+  }
+
+  .jobs__search input {
+    flex-grow: 1;
+    min-inline-size: 0;
+    border: 0;
+    background: none;
+    outline: none;
+    color: var(--md-sys-color-on-surface);
+    font-family: var(--md-sys-typescale-body-large-font);
+    font-size: var(--md-sys-typescale-body-large-size);
+    letter-spacing: var(--md-sys-typescale-body-large-tracking);
+  }
+
+  .jobs__search input::-webkit-search-cancel-button {
+    display: none;
+  }
+
+  .jobs__search input::placeholder {
+    color: var(--md-sys-color-outline);
+  }
+
+  /*
+   * A filter chip. Unset it is an outlined chip that opens a picker; set it
+   * fills and grows an × that clears it without reopening anything.
+   */
+  .jobs__chip {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    block-size: 40px;
+    padding-inline-end: 4px;
+    border: 1px solid var(--md-sys-color-outline);
+    border-radius: var(--md-sys-shape-corner-small);
+    color: var(--md-sys-color-on-surface-variant);
+
+    transition:
+      background-color var(--md-sys-motion-duration-short4)
+        var(--md-sys-motion-easing-standard),
+      border-color var(--md-sys-motion-duration-short4)
+        var(--md-sys-motion-easing-standard),
+      color var(--md-sys-motion-duration-short4)
+        var(--md-sys-motion-easing-standard);
+  }
+
+  .jobs__chip--on {
+    border-color: transparent;
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+    --md-icon-fill: 1;
+  }
+
+  .jobs__chip-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    block-size: 38px;
+    padding-inline: 16px;
+    padding-inline-end: 12px;
+    border: 0;
+    border-radius: inherit;
+    background: none;
+    color: inherit;
+    font-family: var(--md-sys-typescale-label-large-font);
+    font-size: var(--md-sys-typescale-label-large-size);
+    font-weight: var(--md-sys-typescale-label-large-weight);
+    letter-spacing: var(--md-sys-typescale-label-large-tracking);
+    cursor: pointer;
+  }
+
+  .jobs__chip--on .jobs__chip-label {
+    font-weight: var(--md-sys-typescale-label-large-emphasized-weight);
+  }
+
+  .jobs__chip .md-icon-button {
+    inline-size: 32px;
+    block-size: 32px;
+    color: inherit;
+  }
+
+  .jobs__chip .md-icon-button .md-icon {
+    --md-icon-size: 18px;
+  }
+
+  .jobs__count {
+    margin: 16px 0 18px;
+    font-size: var(--md-sys-typescale-body-medium-size);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  /* --- The grid --- */
+
+  .jobs__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  @media (max-width: 1240px) {
+    .jobs__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 860px) {
+    .jobs__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .jobs__grid > li {
+    /* So every card in a row is the height of the tallest. */
+    display: flex;
+  }
+
+  .job-card {
+    inline-size: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px;
+    border: 1px solid var(--md-sys-color-outline-variant);
+    border-radius: var(--md-sys-shape-corner-extra-large);
+
+    transition:
+      background-color var(--md-sys-motion-duration-short4)
+        var(--md-sys-motion-easing-standard),
+      border-color var(--md-sys-motion-duration-short4)
+        var(--md-sys-motion-easing-standard);
+  }
+
+  .job-card:hover {
+    background-color: var(--md-sys-color-surface-container-low);
+    border-color: var(--md-sys-color-outline);
+  }
+
+  .job-card__top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .job-card__logo,
+  .applications__logo {
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: 40px;
+    block-size: 40px;
+    border-radius: var(--md-sys-shape-corner-small);
+    font-family: var(--md-sys-typescale-label-large-font);
+    font-size: var(--md-sys-typescale-label-medium-size);
+    font-weight: var(--md-sys-typescale-label-large-emphasized-weight);
+    letter-spacing: normal;
+  }
+
+  .job-card__org {
+    min-inline-size: 0;
+    flex-grow: 1;
+  }
+
+  .job-card__tenant {
+    margin: 0;
+    font-size: var(--md-sys-typescale-body-medium-size);
+    line-height: var(--md-sys-typescale-body-medium-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .job-card__place {
+    margin: 0;
+    font-size: var(--md-sys-typescale-body-small-size);
+    line-height: var(--md-sys-typescale-body-small-line-height);
+    color: var(--md-sys-color-outline);
+  }
+
+  .job-card__title {
+    font-family: var(--md-sys-typescale-title-medium-font);
+    font-size: var(--md-sys-typescale-title-large-size);
+    line-height: var(--md-sys-typescale-title-large-line-height);
+    font-weight: var(--md-sys-typescale-title-medium-weight);
+    letter-spacing: var(--md-sys-typescale-title-large-tracking);
+    color: var(--md-sys-color-on-surface);
+    text-decoration: none;
+  }
+
+  .job-card__tags {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .job-card__tags li {
+    display: inline-flex;
+    align-items: center;
+    block-size: 26px;
+    padding-inline: 10px;
+    border-radius: var(--md-sys-shape-corner-small);
+    background-color: var(--md-sys-color-surface-container-high);
+    color: var(--md-sys-color-on-surface-variant);
+    font-size: var(--md-sys-typescale-label-medium-size);
+    font-weight: var(--md-sys-typescale-label-medium-weight);
+    letter-spacing: normal;
+  }
+
+  .job-card__posted {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    /* Pins the date to the bottom however tall the card grows. */
+    margin: auto 0 0;
+    font-size: var(--md-sys-typescale-body-small-size);
+    color: var(--md-sys-color-outline);
+  }
+
+  .jobs__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 64px 32px;
+    border: 1px dashed var(--md-sys-color-outline);
+    border-radius: var(--md-sys-shape-corner-extra-large);
+    text-align: center;
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .jobs__empty p {
+    margin: 0;
+    max-inline-size: 42ch;
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+  }
+
+  /* --- Applications --- */
+
+  .applications__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .application {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border: 1px solid var(--md-sys-color-outline-variant);
+    border-radius: var(--md-sys-shape-corner-large);
+  }
+
+  .application__text {
+    flex-grow: 1;
+    min-inline-size: 0;
+  }
+
+  .application__title {
+    font-family: var(--md-sys-typescale-title-medium-font);
+    font-size: var(--md-sys-typescale-title-medium-size);
+    line-height: var(--md-sys-typescale-title-medium-line-height);
+    font-weight: var(--md-sys-typescale-title-medium-weight);
+    color: var(--md-sys-color-on-surface);
+    text-decoration: none;
+  }
+
+  .application__meta,
+  .application__applied {
+    margin: 2px 0 0;
+    font-size: var(--md-sys-typescale-body-small-size);
+    line-height: var(--md-sys-typescale-body-small-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .application__applied {
+    color: var(--md-sys-color-outline);
+  }
+
+  .application__stage {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    block-size: 28px;
+    padding-inline: 12px;
+    border-radius: var(--md-sys-shape-corner-full);
+    font-size: var(--md-sys-typescale-label-medium-size);
+    font-weight: var(--md-sys-typescale-label-medium-emphasized-weight);
+    letter-spacing: normal;
+  }
+
+  /*
+   * One colour per stage, from the scheme's roles rather than invented hues,
+   * so they hold up in light, dark and both contrast levels.
+   */
+  .application__stage--new {
+    background-color: var(--md-sys-color-tertiary-container);
+    color: var(--md-sys-color-on-tertiary-container);
+  }
+
+  .application__stage--reviewing {
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+  }
+
+  .application__stage--hired {
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+  }
+
+  .application__stage--rejected {
+    background-color: var(--md-sys-color-error-container);
+    color: var(--md-sys-color-on-error-container);
+  }
+
+  .application__stage--withdrawn {
+    border: 1px solid var(--md-sys-color-outline-variant);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  /* --- The empty state (draft B) --- */
+
+  .applications__empty {
+    inline-size: 100%;
+    max-inline-size: 620px;
+    margin-inline: auto;
+    padding-block-start: 16px;
+  }
+
+  .applications__empty-head {
+    text-align: center;
+  }
+
+  .applications__empty-mark {
+    display: inline-grid;
+    place-items: center;
+    inline-size: 72px;
+    block-size: 72px;
+    margin-block-end: 20px;
+    border-radius: var(--md-sys-shape-corner-extra-large);
+    background-color: var(--md-sys-color-surface-container-high);
+    color: var(--md-sys-color-primary);
+  }
+
+  .applications__empty-head h2 {
+    margin: 0;
+    font-family: var(--md-sys-typescale-headline-medium-font);
+    font-size: var(--md-sys-typescale-headline-medium-size);
+    line-height: var(--md-sys-typescale-headline-medium-line-height);
+    font-weight: var(--md-sys-typescale-headline-medium-weight);
+    letter-spacing: var(--md-sys-typescale-headline-medium-tracking);
+  }
+
+  .applications__empty-head p {
+    margin: 10px 0 0;
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  /*
+   * Centred, like the two lines above it. It was a flex row with the icon
+   * first, which pushed the heading in by the icon's width and left it
+   * hanging off-axis from everything else in the column.
+   */
+  .applications__suggest-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin: 32px 0 14px;
+    color: var(--md-sys-color-primary);
+    text-align: center;
+  }
+
+  .applications__suggest-head > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .applications__suggest-head h3 {
+    margin: 0;
+    font-size: var(--md-sys-typescale-title-medium-size);
+    line-height: var(--md-sys-typescale-title-medium-line-height);
+    font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+    color: var(--md-sys-color-on-surface);
+  }
+
+  /* What the suggestions were narrowed by — stated, so it can be argued with. */
+  .applications__suggest-head > span {
+    font-size: var(--md-sys-typescale-body-small-size);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .applications__suggest {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .applications__suggest a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border: 1px solid var(--md-sys-color-outline-variant);
+    border-radius: var(--md-sys-shape-corner-large);
+    color: var(--md-sys-color-on-surface-variant);
+    text-decoration: none;
+
+    transition:
+      background-color var(--md-sys-motion-duration-short4)
+        var(--md-sys-motion-easing-standard),
+      border-color var(--md-sys-motion-duration-short4)
+        var(--md-sys-motion-easing-standard);
+  }
+
+  .applications__suggest a:hover {
+    background-color: var(--md-sys-color-surface-container-low);
+    border-color: var(--md-sys-color-outline);
+  }
+
+  .applications__suggest-text {
+    flex-grow: 1;
+    min-inline-size: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .applications__suggest-title {
+    font-size: var(--md-sys-typescale-title-medium-size);
+    line-height: var(--md-sys-typescale-title-medium-line-height);
+    font-weight: var(--md-sys-typescale-title-medium-weight);
+    color: var(--md-sys-color-on-surface);
+  }
+
+  .applications__suggest-meta {
+    font-size: var(--md-sys-typescale-body-small-size);
+    line-height: var(--md-sys-typescale-body-small-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .applications__empty-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-block-start: 28px;
+  }
+}

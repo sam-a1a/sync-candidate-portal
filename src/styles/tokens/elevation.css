@@ -1,0 +1,46 @@
+/*
+ * Material 3 elevation.
+ *
+ * M3 communicates depth with *tonal* surface colour first and shadows only
+ * when a component genuinely floats over busy content. The surface-container
+ * roles are the tonal ladder:
+ *
+ *   level 0  surface                     most components at rest
+ *   level 1  surface-container-low       elevated cards, modal sheets
+ *   level 2  surface-container           menus, nav bar, scrolled app bar
+ *   level 3  surface-container-high      FAB, dialogs, search
+ *   level 4  surface-container-highest   hover/focus increase only
+ *   level 5  surface-container-highest   hover/focus increase only
+ *
+ * Reach for the tonal role before the shadow. The shadow recipes below exist
+ * for the cases the spec allows - a FAB over imagery, overlapping elements -
+ * and are tinted from --md-sys-color-shadow so they stay scheme-correct.
+ */
+
+:root {
+  /* Nominal heights, for components that need the raw value. */
+  --md-sys-elevation-level0: 0px;
+  --md-sys-elevation-level1: 1px;
+  --md-sys-elevation-level2: 3px;
+  --md-sys-elevation-level3: 6px;
+  --md-sys-elevation-level4: 8px;
+  --md-sys-elevation-level5: 12px;
+
+  /* Two-part umbra/penumbra recipes, ready for box-shadow. */
+  --md-sys-elevation-shadow-level0: none;
+  --md-sys-elevation-shadow-level1:
+    0 1px 2px 0 color-mix(in srgb, var(--md-sys-color-shadow) 30%, transparent),
+    0 1px 3px 1px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
+  --md-sys-elevation-shadow-level2:
+    0 1px 2px 0 color-mix(in srgb, var(--md-sys-color-shadow) 30%, transparent),
+    0 2px 6px 2px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
+  --md-sys-elevation-shadow-level3:
+    0 1px 3px 0 color-mix(in srgb, var(--md-sys-color-shadow) 30%, transparent),
+    0 4px 8px 3px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
+  --md-sys-elevation-shadow-level4:
+    0 2px 3px 0 color-mix(in srgb, var(--md-sys-color-shadow) 30%, transparent),
+    0 6px 10px 4px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
+  --md-sys-elevation-shadow-level5:
+    0 4px 4px 0 color-mix(in srgb, var(--md-sys-color-shadow) 30%, transparent),
+    0 8px 12px 6px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
+}

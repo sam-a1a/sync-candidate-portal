@@ -1,0 +1,431 @@
+/*
+ * Material 3 Expressive navigation rail.
+ *
+ * A fixed 96px rail - no expanded mode. Destinations carry their labels
+ * permanently, so there is nothing an expanded state would reveal, and a rail
+ * that cannot change width is one less thing for page layout to react to.
+ *
+ * Anatomy of an item:
+ *
+ *   .nav-rail__item            grid; the positioning context
+ *     .nav-rail__indicator     absolutely positioned pill BEHIND the content
+ *     .nav-rail__icon-wrap     the icon, plus the state layer
+ *     .nav-rail__label
+ *
+ * The indicator sits outside the content flow so it can scale up from nothing
+ * on selection without pushing the icon or the label around.
+ *
+ * Everything is written with logical properties, so the rail mirrors for
+ * Arabic with no RTL-specific rules.
+ */
+
+@layer components {
+  .nav-rail {
+    --nav-rail-width: 96px;
+    --nav-rail-indicator-width: 56px;
+    --nav-rail-indicator-height: 32px;
+    --nav-rail-icon-size: 24px;
+
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 10;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    flex: none;
+
+    block-size: 100svh;
+    inline-size: var(--nav-rail-width);
+    padding-block: 24px 12px;
+
+    /*
+     * `surface-container`, not `surface`.
+     *
+     * The page sits on `background`, and in this scheme `background` and
+     * `surface` are the same value - so a rail on `surface` is invisible as a
+     * surface and the navigation floats in the page with no edge. The
+     * container roles exist for exactly this: they step up the tonal ladder to
+     * separate a region from the content beside it. It is also what M3
+     * Expressive specifies for navigation containers.
+     */
+    background-color: var(--md-sys-color-surface-container);
+    color: var(--md-sys-color-on-surface-variant);
+
+    overflow-x: clip;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  /* --- Brand --- */
+
+  /*
+   * A mark, not a link. Every destination the logo could point at is already
+   * one click away in this same rail and the FAB goes to Jobs, so a third
+   * route to the same page would only be one more thing to keep in sync.
+   */
+  .nav-rail__logo {
+    inline-size: 36px;
+    block-size: auto;
+    /*
+     * Larger than the gaps further down on purpose: this separates the brand
+     * from the navigation, rather than spacing two navigation items.
+     */
+    margin-block-end: 48px;
+    flex: none;
+  }
+
+  /* --- Primary action --- */
+
+  /* --- Destinations --- */
+
+  .nav-rail__group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    inline-size: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-rail__item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    row-gap: 4px;
+
+    box-sizing: border-box;
+    inline-size: 100%;
+    padding: 4px 0 6px;
+    border: 0;
+    background: none;
+    color: inherit;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* --- Active indicator --- */
+
+  .nav-rail__indicator {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+
+    inset-block-start: 4px;
+    /*
+     * Symmetric insets centre the 56px pill without a transform, which keeps
+     * it correct in RTL and leaves `scale` free for the selection animation.
+     */
+    inset-inline: calc(50% - var(--nav-rail-indicator-width) / 2);
+    block-size: var(--nav-rail-indicator-height);
+
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-secondary-container);
+
+    /*
+     * Unselected, the pill is collapsed to nothing horizontally. Selecting an
+     * item springs it open from the centre - the signature Expressive move.
+     * `scale` rather than `transform` so the pressed state composes with it
+     * instead of overwriting it.
+     */
+    scale: 0 1;
+    opacity: 0;
+
+    transition-property: scale, opacity;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-fast-spatial);
+    transition-duration: var(--md-sys-motion-spring-expressive-fast-spatial-duration);
+  }
+
+  .nav-rail__item[aria-current='page'] .nav-rail__indicator {
+    scale: 1 1;
+    opacity: 1;
+  }
+
+  /* Press squashes the pill. Only meaningful once it is actually visible. */
+  .nav-rail__item[aria-current='page']:active .nav-rail__indicator {
+    scale: 0.94 0.9;
+  }
+
+  /* --- Icon --- */
+
+  .nav-rail__icon-wrap {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    inline-size: var(--nav-rail-indicator-width);
+    block-size: var(--nav-rail-indicator-height);
+    border-radius: var(--md-sys-shape-corner-full);
+    color: var(--md-sys-color-on-surface-variant);
+
+    transition-property: color;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-default-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-default-effects-duration);
+  }
+
+  .nav-rail__item .md-icon {
+    --md-icon-size: var(--nav-rail-icon-size);
+    /*
+     * The selected state fills the icon by driving the FILL axis, not by
+     * swapping in a second glyph. A critically damped effects spring: FILL is
+     * clamped at 1, so an overshooting spatial spring would just flat-spot.
+     */
+    transition-property: --md-icon-fill, --md-icon-weight;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-default-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-default-effects-duration);
+  }
+
+  .nav-rail__item[aria-current='page'] {
+    --md-icon-fill: 1;
+    --md-icon-weight: 500;
+  }
+
+  .nav-rail__item[aria-current='page'] .nav-rail__icon-wrap {
+    color: var(--md-sys-color-on-secondary-container);
+  }
+
+  /* State layer, sized to the indicator so hover reads as touching the icon. */
+  .nav-rail__icon-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: currentColor;
+    opacity: 0;
+    transition-property: opacity;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-fast-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-fast-effects-duration);
+  }
+
+  .nav-rail__item:hover .nav-rail__icon-wrap::after {
+    opacity: var(--md-sys-state-hover-state-layer-opacity);
+  }
+
+  .nav-rail__item:focus-visible .nav-rail__icon-wrap::after {
+    opacity: var(--md-sys-state-focus-state-layer-opacity);
+  }
+
+  .nav-rail__item:active .nav-rail__icon-wrap::after {
+    opacity: var(--md-sys-state-pressed-state-layer-opacity);
+  }
+
+  .nav-rail__item:focus-visible {
+    outline: none;
+  }
+
+  .nav-rail__item:focus-visible .nav-rail__indicator {
+    outline: 3px solid var(--md-sys-color-primary);
+    outline-offset: 2px;
+    opacity: 1;
+  }
+
+  /* --- Label --- */
+
+  .nav-rail__label {
+    position: relative;
+    z-index: 1;
+
+    font-family: var(--md-sys-typescale-label-medium-font);
+    font-size: var(--md-sys-typescale-label-medium-size);
+    font-weight: var(--md-sys-typescale-label-medium-weight);
+    line-height: var(--md-sys-typescale-label-medium-line-height);
+    letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+
+    inline-size: 100%;
+    padding-inline: 4px;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    /*
+     * Weight is animated on the wght axis rather than switched between two
+     * cuts, so selecting an item thickens the label continuously.
+     */
+    transition-property: font-weight, color;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-default-spatial);
+    transition-duration: var(--md-sys-motion-spring-expressive-default-spatial-duration);
+  }
+
+  .nav-rail__item[aria-current='page'] .nav-rail__label {
+    font-weight: var(--md-sys-typescale-label-medium-emphasized-weight);
+    color: var(--md-sys-color-on-surface);
+  }
+
+  /* --- Bottom cluster --- */
+
+  /*
+   * Notifications, theme, account.
+   *
+   * Deliberately NOT built from nav items. These are not destinations you can
+   * be "at", they are controls, and giving them the same icon-over-label
+   * treatment as Jobs or CVs would make the rail read as one six-item list
+   * where three behave differently. Circular icon buttons say "control" at a
+   * glance and need no label to do it.
+   */
+  .nav-rail__bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-block-start: auto;
+    padding-block-start: 12px;
+  }
+
+  .nav-rail__utility {
+    position: relative;
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    inline-size: 48px;
+    block-size: 48px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-surface-container-high);
+    color: var(--md-sys-color-on-surface-variant);
+    cursor: pointer;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+
+    transition-property: background-color, color, border-radius;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-default-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-default-effects-duration);
+  }
+
+  /* Selected - e.g. sitting on the Notifications page. */
+  .nav-rail__utility[aria-current='page'] {
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+    --md-icon-fill: 1;
+  }
+
+  /*
+   * Fills on hover, on the FILL axis, so the icon thickens smoothly instead of
+   * swapping to a second glyph. Safe here in a way it would not be on a
+   * destination, where a filled icon means "you are here".
+   */
+  .nav-rail__utility:hover,
+  .nav-rail__utility:focus-visible {
+    --md-icon-fill: 1;
+  }
+
+  .nav-rail__utility .md-icon {
+    position: relative;
+    z-index: 1;
+    transition-property: --md-icon-fill, --md-icon-weight;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-default-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-default-effects-duration);
+  }
+
+  .nav-rail__utility::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    transition-property: opacity;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-fast-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-fast-effects-duration);
+  }
+
+  .nav-rail__utility:hover::after {
+    opacity: var(--md-sys-state-hover-state-layer-opacity);
+  }
+
+  .nav-rail__utility:focus-visible::after {
+    opacity: var(--md-sys-state-focus-state-layer-opacity);
+  }
+
+  .nav-rail__utility:active::after {
+    opacity: var(--md-sys-state-pressed-state-layer-opacity);
+  }
+
+  /* Shape morph on press, the same move the FAB makes. */
+  .nav-rail__utility:active {
+    border-radius: var(--md-sys-shape-corner-large);
+  }
+
+  /* The account button carries the person, so it gets its own colour. */
+  .nav-rail__utility--account {
+    background-color: var(--md-sys-color-tertiary-container);
+    color: var(--md-sys-color-on-tertiary-container);
+    overflow: hidden;
+  }
+
+  /* --- Badge --- */
+
+  .nav-rail__badge {
+    position: absolute;
+    z-index: 2;
+    /* Top-end corner of the 48px button. */
+    inset-block-start: 8px;
+    inset-inline-start: calc(50% + 2px);
+
+    min-inline-size: 16px;
+    block-size: 16px;
+    padding-inline: 4px;
+    box-sizing: border-box;
+
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-error);
+    color: var(--md-sys-color-on-error);
+
+    font-family: var(--md-sys-typescale-label-small-font);
+    font-size: var(--md-sys-typescale-label-small-size);
+    font-weight: var(--md-sys-typescale-label-small-emphasized-weight);
+    line-height: 16px;
+    letter-spacing: normal;
+    text-align: center;
+  }
+
+  /* --- Avatar --- */
+
+  /* A photo fills the whole button; initials are just centred text in it. */
+  .nav-rail__avatar {
+    position: relative;
+    z-index: 1;
+    inline-size: 100%;
+    block-size: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+  }
+
+  .nav-rail__avatar-initials {
+    position: relative;
+    z-index: 1;
+    font-family: var(--md-sys-typescale-label-large-font);
+    font-size: var(--md-sys-typescale-label-large-size);
+    font-weight: var(--md-sys-typescale-label-large-emphasized-weight);
+    line-height: 1;
+    letter-spacing: normal;
+  }
+
+  /*
+   * Reduced motion: the springs are already flattened globally, but the
+   * indicator scaling from zero is the one thing worth removing entirely -
+   * it reads as movement rather than as a state change.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    .nav-rail__indicator {
+      scale: 1 1;
+    }
+
+    .nav-rail__item:not([aria-current='page']) .nav-rail__indicator {
+      opacity: 0;
+    }
+  }
+
+  /* The language switch wears a flag where the theme switch wears an icon. */
+  .nav-rail__utility .md-flag {
+    position: relative;
+    z-index: 1;
+  }
+}

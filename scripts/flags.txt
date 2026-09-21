@@ -1,0 +1,105 @@
+# Circle Flags used by the app, one per line, fetched into public/flags/
+# by ./scripts/build-flags.py.
+#
+# Source: https://github.com/HatScripts/circle-flags (MIT). Vendored rather
+# than hotlinked from their CDN for the same reasons as the fonts: no
+# third-party request on every page load, no dependency on someone else's
+# uptime, and the set is pinned so a redesign upstream cannot change our UI.
+#
+# Two namespaces, and the difference matters:
+#
+#   language/<code>   A flag for a LANGUAGE. Use these for languages.
+#   <country>         A flag for a COUNTRY. Use these for dialling codes.
+#
+# A language is not a country. Arabic is spoken across two dozen states, so
+# showing Saudi Arabia's flag next to "Arabic" tells a Lebanese or Egyptian
+# speaker their language belongs to somewhere else. Circle Flags ships
+# purpose-made language flags for exactly this; where one exists, it wins.
+#
+# Note: many files under language/ are git symlinks to a country flag. The
+# fetcher resolves them - see build-flags.py.
+
+# --- Languages -------------------------------------------------------------
+language/ar
+language/en-us
+language/fr
+language/es
+language/de
+language/it
+language/pt
+language/nl
+language/tr
+language/ru
+language/uk
+language/pl
+language/ro
+language/el
+language/he
+language/fa
+language/ku
+language/ps
+language/ur
+language/hi
+language/bn
+language/zh
+language/ja
+language/ko
+language/sw
+language/am
+language/so
+language/ti
+language/hy
+language/az
+
+# --- Countries, for phone dialling codes ------------------------------------
+lb
+jo
+sy
+iq
+eg
+ps
+tr
+sa
+ae
+qa
+kw
+bh
+om
+ye
+ly
+tn
+dz
+ma
+sd
+so
+dj
+ir
+af
+pk
+in
+bd
+gb
+us
+ca
+fr
+de
+it
+es
+nl
+be
+se
+no
+dk
+ch
+at
+gr
+cy
+ua
+ru
+pl
+ro
+ke
+et
+ng
+za
+au

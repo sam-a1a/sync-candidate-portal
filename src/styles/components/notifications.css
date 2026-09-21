@@ -1,0 +1,335 @@
+/*
+ * Notifications — draft A, with draft B's empty state.
+ *
+ * The screenshot's four moves: a pill carrying its count, a row of round
+ * shortcuts with labels under them, one rounded sheet that runs off the bottom
+ * of the screen, and rows as separate tonal cards rather than divided lines.
+ * The phone layout becomes a centred 860px column, which is what makes it read
+ * as the same design on a wide screen instead of a stretched one.
+ */
+
+@layer components {
+  .notifications {
+    /* Full width, like every other page — the rail already sets the measure. */
+    inline-size: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /*
+   * Nothing-yet is centred in the page, which means the page has to be the
+   * height of the window rather than of its content. Only that state: with a
+   * list, the sheet ends where its rows end. Scoped with :has() so no other
+   * page's height changes.
+   */
+  main:has(.notifications--empty) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page-transition:has(.notifications--empty) {
+    flex-grow: 1;
+  }
+
+  .page-transition:has(.notifications--empty) > .page-transition__layer {
+    min-block-size: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* --- Header --- */
+
+  .notifications__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 32px;
+    margin-block-end: 40px;
+  }
+
+  .notifications__header h1 {
+    margin: 0;
+    font-family: var(--md-sys-typescale-headline-medium-font);
+    font-size: var(--md-sys-typescale-headline-medium-size);
+    line-height: var(--md-sys-typescale-headline-medium-line-height);
+    font-weight: var(--md-sys-typescale-headline-medium-weight);
+    letter-spacing: var(--md-sys-typescale-headline-medium-tracking);
+  }
+
+  .notifications__header p {
+    margin: 4px 0 0;
+    font-size: var(--md-sys-typescale-body-medium-size);
+    line-height: var(--md-sys-typescale-body-medium-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  /* --- The unread pill --- */
+
+  .notifications__pill {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    block-size: 52px;
+    /* Even both ends, and the same as the gap either side of the count. */
+    padding-inline: 12px;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+    font-size: var(--md-sys-typescale-title-medium-size);
+    font-weight: var(--md-sys-typescale-title-medium-weight);
+    --md-icon-fill: 1;
+  }
+
+  .notifications__pill span {
+    min-inline-size: 32px;
+    block-size: 32px;
+    padding-inline: 10px;
+    box-sizing: border-box;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    font-size: var(--md-sys-typescale-label-large-size);
+    line-height: 32px;
+    font-weight: var(--md-sys-typescale-label-large-emphasized-weight);
+    text-align: center;
+  }
+
+  /* --- The shortcut row --- */
+
+  .notifications__kinds {
+    display: flex;
+    justify-content: center;
+    gap: 44px;
+    margin-block-end: 28px;
+  }
+
+  .notifications__kind {
+    display: grid;
+    justify-items: center;
+    row-gap: 8px;
+    border: 0;
+    padding: 0;
+    background: none;
+    color: var(--md-sys-color-on-surface);
+    font-family: var(--md-sys-typescale-label-large-font);
+    font-size: var(--md-sys-typescale-body-medium-size);
+    cursor: pointer;
+  }
+
+  .notifications__kind:disabled {
+    opacity: 0.38;
+    cursor: default;
+  }
+
+  .notifications__kind-mark {
+    position: relative;
+    display: grid;
+    place-items: center;
+    inline-size: 64px;
+    block-size: 64px;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-surface-container-high);
+    color: var(--md-sys-color-on-surface-variant);
+
+    /* Selection is a fill and a fill of the icon, on the effects spring. */
+    transition-property: background-color, color;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-default-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-default-effects-duration);
+  }
+
+  .notifications__kind:hover:not(:disabled) .notifications__kind-mark {
+    background-color: var(--md-sys-color-surface-container-highest);
+    --md-icon-fill: 1;
+  }
+
+  .notifications__kind--on .notifications__kind-mark {
+    background-color: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-on-primary-container);
+    --md-icon-fill: 1;
+  }
+
+  .notifications__kind-count {
+    position: absolute;
+    inset-block-start: -2px;
+    inset-inline-end: -2px;
+    min-inline-size: 22px;
+    block-size: 22px;
+    padding-inline: 6px;
+    box-sizing: border-box;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-surface-container-highest);
+    color: var(--md-sys-color-on-surface);
+    font-size: var(--md-sys-typescale-label-medium-size);
+    line-height: 22px;
+    font-weight: var(--md-sys-typescale-label-medium-emphasized-weight);
+    text-align: center;
+  }
+
+  .notifications__kind--on .notifications__kind-count {
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+  }
+
+  /* --- The sheet --- */
+
+  .notifications__sheet {
+    /*
+     * Ends where its rows end. Stretching it to the foot of the window left a
+     * pane of empty container under the last notification, which reads as
+     * something failing to load rather than as a sheet.
+     */
+    padding: 22px;
+    border-radius: var(--md-sys-shape-corner-extra-large-increased);
+    background-color: var(--md-sys-color-surface-container-low);
+  }
+
+  .notifications__sheet h2 {
+    margin: 0 0 16px 8px;
+    font-family: var(--md-sys-typescale-title-large-font);
+    font-size: var(--md-sys-typescale-title-large-size);
+    line-height: var(--md-sys-typescale-title-large-line-height);
+    font-weight: var(--md-sys-typescale-title-large-weight);
+  }
+
+  .notifications__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .notifications__more {
+    display: flex;
+    justify-content: center;
+    padding-block-start: 18px;
+  }
+
+  /* --- A row --- */
+
+  .notification {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 18px;
+    border-radius: var(--md-sys-shape-corner-large-increased);
+    background-color: var(--md-sys-color-surface-container-high);
+    color: var(--md-sys-color-on-surface);
+    text-decoration: none;
+
+    transition: background-color var(--md-sys-motion-duration-short4)
+      var(--md-sys-motion-easing-standard);
+  }
+
+  .notification:hover {
+    background-color: var(--md-sys-color-surface-container-highest);
+  }
+
+  .notification__mark {
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: 48px;
+    block-size: 48px;
+    border-radius: var(--md-sys-shape-corner-full);
+    --md-icon-fill: 1;
+  }
+
+  /* One colour per kind, from the scheme's roles rather than invented hues. */
+  .notification__mark--applications {
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+  }
+
+  .notification__mark--cvs {
+    background-color: var(--md-sys-color-tertiary-container);
+    color: var(--md-sys-color-on-tertiary-container);
+  }
+
+  .notification__mark--failed {
+    background-color: var(--md-sys-color-error-container);
+    color: var(--md-sys-color-on-error-container);
+  }
+
+  .notification__text {
+    flex-grow: 1;
+    min-inline-size: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .notification__headline {
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  /* Read rows are muted; unread ones carry the weight, as in the repo. */
+  .notification--unread .notification__headline {
+    font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+    color: var(--md-sys-color-on-surface);
+  }
+
+  .notification__detail {
+    font-size: var(--md-sys-typescale-body-small-size);
+    line-height: var(--md-sys-typescale-body-small-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .notification__end {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .notification__when {
+    font-size: var(--md-sys-typescale-body-small-size);
+    color: var(--md-sys-color-outline);
+  }
+
+  .notification__dot {
+    inline-size: 10px;
+    block-size: 10px;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-primary);
+  }
+
+  /* --- Nothing yet (draft B) --- */
+
+  .notifications__empty {
+    /* Centred in whatever height the page has. */
+    margin-block: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 72px 32px;
+    border: 1px dashed var(--md-sys-color-outline);
+    border-radius: var(--md-sys-shape-corner-extra-large);
+    text-align: center;
+  }
+
+  .notifications__empty-mark {
+    display: grid;
+    place-items: center;
+    inline-size: 72px;
+    block-size: 72px;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-surface-container-high);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .notifications__empty p {
+    margin: 0;
+    max-inline-size: 46ch;
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+}

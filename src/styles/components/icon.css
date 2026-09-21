@@ -1,0 +1,125 @@
+/*
+ * Material Symbols.
+ *
+ * A variable icon font, not an SVG set - which matters for Expressive. M3
+ * draws an unselected item's icon outlined and a selected one's filled. With a
+ * variable font that is the FILL axis moving 0 -> 1, so it can be *animated*
+ * rather than cross-faded between two different icons.
+ *
+ * Subset by codepoint to the icons in scripts/icons.txt; see build-fonts.sh.
+ */
+
+@font-face {
+  font-family: 'Material Symbols Rounded';
+  src: url('../../fonts/material-symbols-rounded.woff2') format('woff2');
+  font-weight: 100 700;
+  font-style: normal;
+  /*
+   * `block`, not `swap`. These are Private Use Area codepoints - every
+   * fallback font renders them as tofu, so showing a fallback is worse than
+   * showing nothing for the ~100ms before the font arrives.
+   */
+  font-display: block;
+}
+
+/* Registered so they interpolate; see tokens/motion.css for the reasoning. */
+@property --md-icon-fill {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --md-icon-weight {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 400;
+}
+
+@property --md-icon-grade {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+@layer components {
+  .md-icon {
+    /*
+     * Two tokens for one number, deliberately.
+     *
+     * font-size needs a length; a font-variation-settings axis needs a bare
+     * <number>. Feeding `24px` to `'opsz'` makes that axis invalid, and an
+     * invalid axis drops the ENTIRE font-variation-settings declaration - so a
+     * unit slip here silently kills FILL, wght and GRAD too, with no warning
+     * anywhere. <Icon size> sets both; keep them equal.
+     */
+    --md-icon-size: 24px;
+    --md-icon-opsz: 24;
+
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1em;
+    block-size: 1em;
+
+    font-family: 'Material Symbols Rounded';
+    font-size: var(--md-icon-size);
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+
+    font-variation-settings:
+      'FILL' var(--md-icon-fill),
+      'wght' var(--md-icon-weight),
+      'GRAD' var(--md-icon-grade),
+      'opsz' var(--md-icon-opsz);
+
+    /*
+     * The body sets tracking for text; applied to a single-glyph icon it just
+     * offsets it inside its own box. Same for text-transform, which would
+     * otherwise be inherited into a PUA codepoint.
+     */
+    /*
+     * The axes animate here, once, rather than in every component that uses an
+     * icon. Any control can now write `--md-icon-fill: 1` on :hover and get
+     * the same smooth thickening the theme switch has - the axis interpolates
+     * instead of the glyph being swapped.
+     *
+     * A critically damped effects spring: FILL is clamped at 1, so an
+     * overshooting spatial spring would just flat-spot at the end.
+     */
+    transition-property: --md-icon-fill, --md-icon-weight, --md-icon-grade;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-default-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-default-effects-duration);
+
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+
+    /* Icons are not text: never mirror or reorder them with the paragraph. */
+    direction: ltr;
+
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /*
+   * Icons that genuinely point somewhere - a back chevron, a "next" arrow -
+   * must mirror in RTL. Directionally neutral icons must not, which is why
+   * this is opt-in rather than applied to everything.
+   */
+  .md-icon--directional:where([dir='rtl'] *) {
+    scale: -1 1;
+  }
+}
+
+@layer components {
+  /* Circle Flags are already round; this only keeps them from being squashed. */
+  .md-flag {
+    flex: none;
+    display: block;
+    border-radius: var(--md-sys-shape-corner-full);
+    object-fit: cover;
+  }
+}

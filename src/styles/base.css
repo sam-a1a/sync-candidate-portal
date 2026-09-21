@@ -1,0 +1,141 @@
+/*
+ * Element defaults, expressed entirely through tokens.
+ *
+ * Kept deliberately small: this sets the document's colour, type and motion
+ * baseline and stops there. Components belong in components, not here.
+ *
+ * Wrapped in @layer base so component and utility styles outrank it.
+ * Unlayered CSS beats *every* layer, so leaving this out of a layer would
+ * let `a { color: primary }` win over a component's own `color`, no matter
+ * how specific the component's selector was.
+ */
+
+@layer base {
+  html {
+    /*
+     * The two non-registered variable font axes ride on custom properties so
+     * they can be animated (see tokens/motion.css). This declaration is written
+     * once and never changes - transitions move the numbers inside it.
+     *
+     * Unknown axes are ignored per spec, so this is harmless on Noto Sans
+     * Arabic, which has neither ROND nor GRAD.
+     */
+    font-variation-settings:
+      'ROND' var(--md-sys-typeface-rond),
+      'GRAD' var(--md-sys-typeface-grad);
+
+    /* No-op while opsz is pinned in the woff2; correct if it is ever restored. */
+    font-optical-sizing: auto;
+
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--md-sys-color-background);
+    color: var(--md-sys-color-on-surface);
+
+    font-family: var(--md-sys-typescale-body-large-font);
+    font-size: var(--md-sys-typescale-body-large-size);
+    font-weight: var(--md-sys-typescale-body-large-weight);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+    letter-spacing: var(--md-sys-typescale-body-large-tracking);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /*
+   * Headings map onto the type scale. Display is not included: it is a choice
+   * you make for a specific hero, not something an <h1> should inherit.
+   */
+  h1 {
+    font-family: var(--md-sys-typescale-headline-large-font);
+    font-size: var(--md-sys-typescale-headline-large-size);
+    font-weight: var(--md-sys-typescale-headline-large-weight);
+    line-height: var(--md-sys-typescale-headline-large-line-height);
+    letter-spacing: var(--md-sys-typescale-headline-large-tracking);
+    margin: 0;
+  }
+
+  h2 {
+    font-family: var(--md-sys-typescale-headline-medium-font);
+    font-size: var(--md-sys-typescale-headline-medium-size);
+    font-weight: var(--md-sys-typescale-headline-medium-weight);
+    line-height: var(--md-sys-typescale-headline-medium-line-height);
+    letter-spacing: var(--md-sys-typescale-headline-medium-tracking);
+    margin: 0;
+  }
+
+  h3 {
+    font-family: var(--md-sys-typescale-headline-small-font);
+    font-size: var(--md-sys-typescale-headline-small-size);
+    font-weight: var(--md-sys-typescale-headline-small-weight);
+    line-height: var(--md-sys-typescale-headline-small-line-height);
+    letter-spacing: var(--md-sys-typescale-headline-small-tracking);
+    margin: 0;
+  }
+
+  h4 {
+    font-family: var(--md-sys-typescale-title-large-font);
+    font-size: var(--md-sys-typescale-title-large-size);
+    font-weight: var(--md-sys-typescale-title-large-weight);
+    line-height: var(--md-sys-typescale-title-large-line-height);
+    letter-spacing: var(--md-sys-typescale-title-large-tracking);
+    margin: 0;
+  }
+
+  h5,
+  h6 {
+    font-family: var(--md-sys-typescale-title-medium-font);
+    font-size: var(--md-sys-typescale-title-medium-size);
+    font-weight: var(--md-sys-typescale-title-medium-weight);
+    line-height: var(--md-sys-typescale-title-medium-line-height);
+    letter-spacing: var(--md-sys-typescale-title-medium-tracking);
+    margin: 0;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  /*
+   * `inverse-*` is the role pair for content that must contrast with the page
+   * rather than sit on it - selections, snackbars, tooltips.
+   */
+  ::selection {
+    background-color: var(--md-sys-color-inverse-surface);
+    color: var(--md-sys-color-inverse-on-surface);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--md-sys-color-primary);
+    outline-offset: 2px;
+  }
+
+  /*
+   * Logical properties throughout, so the same rules hold when <html dir> flips
+   * to rtl for Arabic. Avoid left/right in component CSS for the same reason.
+   */
+  hr {
+    border: none;
+    border-block-start: 1px solid var(--md-sys-color-outline-variant);
+    margin-block: 0;
+  }
+
+  a {
+    color: var(--md-sys-color-primary);
+    text-underline-offset: 0.2em;
+  }
+
+  /* Form controls do not inherit type by default. */
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+  }
+}

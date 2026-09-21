@@ -1,0 +1,51 @@
+/*
+ * View Transition setup for the theme switch: a straight cross-fade, on M3
+ * timing.
+ *
+ * Two details the browser default gets wrong for a full-page colour change:
+ *
+ * `mix-blend-mode: normal` - the default is `plus-lighter`, which adds the two
+ * snapshots together. Mid-fade both are part-transparent, and adding them
+ * blows the whole page out to a bright flash. Exactly the thing the fade is
+ * supposed to remove.
+ *
+ * The old snapshot holds at full opacity instead of fading out, and the new
+ * one fades in on top. Fading both at once leaves the middle of the transition
+ * semi-transparent over the page background, which greys everything out on the
+ * way past.
+ */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 0;
+  animation: md-theme-hold var(--md-sys-motion-duration-medium4)
+    var(--md-sys-motion-easing-emphasized) both;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+  animation: md-theme-fade-in var(--md-sys-motion-duration-medium4)
+    var(--md-sys-motion-easing-emphasized) both;
+}
+
+@keyframes md-theme-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes md-theme-hold {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+  }
+}

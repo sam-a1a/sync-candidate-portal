@@ -1,0 +1,324 @@
+/*
+ * M3 outlined text field, plus the small set of form parts the profile needs.
+ *
+ * The notched outline is done with a real border and a label that sits on it
+ * with the page colour behind, rather than the SVG-notch approach Material Web
+ * uses. It is far less machinery, and the one thing it needs — the label's
+ * background matching what is behind the field — is handled by inheriting
+ * --md-field-surface from whatever container the field is in.
+ */
+
+@layer components {
+  .md-field {
+    --md-field-surface: var(--md-sys-color-background);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  .md-field__label {
+    position: absolute;
+    inset-block-start: -8px;
+    inset-inline-start: 12px;
+    z-index: 1;
+    padding-inline: 4px;
+    background-color: var(--md-field-surface);
+    font-family: var(--md-sys-typescale-body-small-font);
+    font-size: var(--md-sys-typescale-body-small-size);
+    line-height: var(--md-sys-typescale-body-small-line-height);
+    letter-spacing: var(--md-sys-typescale-body-small-tracking);
+    color: var(--md-sys-color-on-surface-variant);
+    pointer-events: none;
+
+    transition-property: color;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-fast-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-fast-effects-duration);
+  }
+
+  .md-field__control {
+    inline-size: 100%;
+    box-sizing: border-box;
+    block-size: 56px;
+    padding-inline: 16px;
+    border: 1px solid var(--md-sys-color-outline);
+    border-radius: var(--md-sys-shape-corner-extra-small);
+    background: none;
+    color: var(--md-sys-color-on-surface);
+
+    font-family: var(--md-sys-typescale-body-large-font);
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+    letter-spacing: var(--md-sys-typescale-body-large-tracking);
+
+    /*
+     * border-color AND the inset ring, so focus fades in rather than snapping.
+     * See the :focus rule for why the thickness is a box-shadow.
+     */
+    transition:
+      border-color var(--md-sys-motion-duration-short4)
+        var(--md-sys-motion-easing-standard),
+      box-shadow var(--md-sys-motion-duration-short4)
+        var(--md-sys-motion-easing-standard);
+  }
+
+  textarea.md-field__control {
+    block-size: auto;
+    min-block-size: 112px;
+    padding-block: 16px;
+    resize: vertical;
+  }
+
+  select.md-field__control {
+    appearance: none;
+    /* Room for the chevron drawn by .md-field__trailing. */
+    padding-inline-end: 44px;
+    cursor: pointer;
+  }
+
+  /* Chips and switches move on the same effects spring as everything else. */
+  .md-chip {
+    transition:
+      background-color var(--md-sys-motion-duration-short4)
+        var(--md-sys-motion-easing-standard),
+      color var(--md-sys-motion-duration-short4)
+        var(--md-sys-motion-easing-standard);
+  }
+
+  .md-field__control::placeholder {
+    color: var(--md-sys-color-outline);
+  }
+
+  /*
+   * M3's focused outline is 2px. Growing `border-width` from 1 to 2 changes
+   * the box, so the text jumps a pixel and the whole field twitches - and
+   * border-width cannot be transitioned smoothly anyway.
+   *
+   * An inset box-shadow paints the second pixel INSIDE the existing border
+   * instead: same 2px look, no reflow, and box-shadow interpolates, so focus
+   * fades in and out with everything else.
+   */
+  .md-field__control:focus {
+    outline: none;
+    border-color: var(--md-sys-color-primary);
+    box-shadow: inset 0 0 0 1px var(--md-sys-color-primary);
+  }
+
+  .md-field--error .md-field__control:focus {
+    border-color: var(--md-sys-color-error);
+    box-shadow: inset 0 0 0 1px var(--md-sys-color-error);
+  }
+
+  .md-field:focus-within .md-field__label {
+    color: var(--md-sys-color-primary);
+  }
+
+  .md-field__trailing {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 12px;
+    block-size: 56px;
+    display: grid;
+    place-items: center;
+    color: var(--md-sys-color-on-surface-variant);
+    pointer-events: none;
+  }
+
+  .md-field__help {
+    margin: 4px 0 0;
+    padding-inline: 16px;
+    font-family: var(--md-sys-typescale-body-small-font);
+    font-size: var(--md-sys-typescale-body-small-size);
+    line-height: var(--md-sys-typescale-body-small-line-height);
+    letter-spacing: var(--md-sys-typescale-body-small-tracking);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  /* Error takes the whole field, label and helper together. */
+  .md-field--error .md-field__control {
+    border-color: var(--md-sys-color-error);
+  }
+
+  .md-field--error .md-field__label,
+  .md-field--error .md-field__help {
+    color: var(--md-sys-color-error);
+  }
+
+  /* --- Chips --- */
+
+  .md-chip-set {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .md-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    block-size: 36px;
+    padding-inline: 16px 8px;
+    border-radius: var(--md-sys-shape-corner-small);
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+    font-family: var(--md-sys-typescale-label-large-font);
+    font-size: var(--md-sys-typescale-label-large-size);
+    line-height: var(--md-sys-typescale-label-large-line-height);
+    font-weight: var(--md-sys-typescale-label-large-weight);
+    letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  }
+
+  /*
+   * Outlined chips are the "other skills" the platform has no name for.
+   * The different treatment is the point: it is how you see at a glance which
+   * skills Screening can actually read.
+   */
+  .md-chip--outlined {
+    border: 1px solid var(--md-sys-color-outline);
+    background: none;
+    color: var(--md-sys-color-on-surface);
+    font-weight: var(--md-sys-typescale-label-large-weight);
+  }
+
+  /*
+   * A brand mark as a mask, tinted with the chip's own colour. Simple Icons
+   * have no fill attribute, so an <img> would render them black.
+   */
+  .md-skill-icon {
+    flex: none;
+    display: inline-block;
+    background-color: var(--md-skill-icon-color, currentColor);
+    mask: var(--md-skill-icon) center / contain no-repeat;
+    -webkit-mask: var(--md-skill-icon) center / contain no-repeat;
+  }
+
+  .md-chip .md-icon-button {
+    inline-size: 24px;
+    block-size: 24px;
+    color: inherit;
+  }
+
+  .md-chip .md-icon-button .md-icon {
+    --md-icon-size: 16px;
+    --md-icon-opsz: 20;
+  }
+
+  /* --- Segmented button --- */
+
+  .md-segmented {
+    display: flex;
+    flex-grow: 1;
+    min-inline-size: 0;
+    block-size: 40px;
+    border: 1px solid var(--md-sys-color-outline);
+    border-radius: var(--md-sys-shape-corner-full);
+    overflow: hidden;
+  }
+
+  .md-segmented__option {
+    position: relative;
+    flex-grow: 1;
+    flex-basis: 0;
+    min-inline-size: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: 0;
+    border-inline-start: 1px solid var(--md-sys-color-outline);
+    background: none;
+    color: var(--md-sys-color-on-surface-variant);
+    font-family: var(--md-sys-typescale-label-large-font);
+    font-size: var(--md-sys-typescale-label-large-size);
+    font-weight: var(--md-sys-typescale-label-large-weight);
+    letter-spacing: var(--md-sys-typescale-label-large-tracking);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+
+    transition-property: background-color, color, font-weight;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-default-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-default-effects-duration);
+  }
+
+  .md-segmented__option:first-child {
+    border-inline-start: 0;
+  }
+
+  .md-segmented__option[aria-checked='true'] {
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+    font-weight: var(--md-sys-typescale-label-large-emphasized-weight);
+    --md-icon-fill: 1;
+  }
+
+  .md-segmented__option .md-icon {
+    --md-icon-size: 16px;
+    --md-icon-opsz: 20;
+  }
+
+  .md-segmented__option:hover {
+    color: var(--md-sys-color-on-surface);
+  }
+
+  /* --- Switch --- */
+
+  .md-switch {
+    position: relative;
+    inline-size: 52px;
+    block-size: 32px;
+    flex: none;
+    padding: 0;
+    border: 2px solid var(--md-sys-color-outline);
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-surface-container-highest);
+    cursor: pointer;
+
+    transition-property: background-color, border-color;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-default-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-default-effects-duration);
+  }
+
+  .md-switch__handle {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 4px;
+    translate: 0 -50%;
+    inline-size: 16px;
+    block-size: 16px;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-outline);
+    display: grid;
+    place-items: center;
+
+    transition-property: inline-size, block-size, inset-inline-start, background-color;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-fast-spatial);
+    transition-duration: var(--md-sys-motion-spring-expressive-fast-spatial-duration);
+  }
+
+  .md-switch[aria-checked='true'] {
+    background-color: var(--md-sys-color-primary);
+    border-color: var(--md-sys-color-primary);
+  }
+
+  /* The handle grows as it travels — M3's switch is not a sliding dot. */
+  .md-switch[aria-checked='true'] .md-switch__handle {
+    inline-size: 24px;
+    block-size: 24px;
+    inset-inline-start: 24px;
+    background-color: var(--md-sys-color-on-primary);
+  }
+
+  .md-switch[aria-checked='true'] .md-icon {
+    --md-icon-size: 16px;
+    --md-icon-opsz: 20;
+    color: var(--md-sys-color-primary);
+  }
+
+  .md-switch:disabled {
+    cursor: default;
+    opacity: 0.38;
+  }
+}

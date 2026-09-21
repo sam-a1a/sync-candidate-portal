@@ -1,0 +1,221 @@
+/*
+ * Material 3 Expressive type scale.
+ *
+ * 15 baseline styles (5 roles x 3 sizes) plus the 15 `emphasized` styles the
+ * Expressive update added. Emphasized is not "bold text" - it is a parallel
+ * scale at the same size and line height with a heavier weight and, in a few
+ * cases, different tracking. Use it for selected states, primary actions and
+ * unread content, so emphasis never reflows a layout.
+ *
+ * Values are transcribed from the androidx source of truth rather than the
+ * design site, since the published tables lag it:
+ *   compose/material3/material3/src/commonMain/kotlin/androidx/compose/
+ *     material3/tokens/TypeScaleTokens.kt  (VERSION v0_103)
+ *
+ * Note where that disagrees with older M3 docs: display-large tracking is
+ * -0.2sp (not -0.25), title-medium is 0.2sp (not 0.15), body-medium is 0.2sp
+ * (not 0.25). The emphasized variants of body-large and title-medium tighten
+ * to 0.15sp rather than inheriting.
+ *
+ * 1sp == 1px at the default root size, so sp values are written as rem.
+ */
+
+:root {
+  /*
+   * Two knobs that retune the whole scale per script. Everything below is
+   * expressed through them, so the Arabic adjustments at the bottom of this
+   * file are two declarations rather than 60.
+   */
+  --md-sys-typescale-tracking-scale: 1;
+  --md-sys-typescale-line-height-scale: 1;
+
+  /* --- Display: brand typeface, largest, sparingly --- */
+  --md-sys-typescale-display-large-font: var(--md-ref-typeface-brand);
+  --md-sys-typescale-display-large-size: 3.5625rem;
+  --md-sys-typescale-display-large-line-height: calc(4rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-display-large-tracking: calc(-0.0125rem * var(--md-sys-typescale-tracking-scale));
+  --md-sys-typescale-display-large-weight: var(--md-ref-typeface-weight-regular);
+  --md-sys-typescale-display-large-emphasized-font: var(--md-ref-typeface-brand);
+  --md-sys-typescale-display-large-emphasized-size: 3.5625rem;
+  --md-sys-typescale-display-large-emphasized-line-height: calc(4rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-display-large-emphasized-tracking: 0rem;
+  --md-sys-typescale-display-large-emphasized-weight: var(--md-ref-typeface-weight-medium);
+
+  --md-sys-typescale-display-medium-font: var(--md-ref-typeface-brand);
+  --md-sys-typescale-display-medium-size: 2.8125rem;
+  --md-sys-typescale-display-medium-line-height: calc(3.25rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-display-medium-tracking: 0rem;
+  --md-sys-typescale-display-medium-weight: var(--md-ref-typeface-weight-regular);
+  --md-sys-typescale-display-medium-emphasized-font: var(--md-ref-typeface-brand);
+  --md-sys-typescale-display-medium-emphasized-size: 2.8125rem;
+  --md-sys-typescale-display-medium-emphasized-line-height: calc(3.25rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-display-medium-emphasized-tracking: 0rem;
+  --md-sys-typescale-display-medium-emphasized-weight: var(--md-ref-typeface-weight-medium);
+
+  --md-sys-typescale-display-small-font: var(--md-ref-typeface-brand);
+  --md-sys-typescale-display-small-size: 2.25rem;
+  --md-sys-typescale-display-small-line-height: calc(2.75rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-display-small-tracking: 0rem;
+  --md-sys-typescale-display-small-weight: var(--md-ref-typeface-weight-regular);
+  --md-sys-typescale-display-small-emphasized-font: var(--md-ref-typeface-brand);
+  --md-sys-typescale-display-small-emphasized-size: 2.25rem;
+  --md-sys-typescale-display-small-emphasized-line-height: calc(2.75rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-display-small-emphasized-tracking: 0rem;
+  --md-sys-typescale-display-small-emphasized-weight: var(--md-ref-typeface-weight-medium);
+
+  /* --- Headline: brand typeface, section headers --- */
+  --md-sys-typescale-headline-large-font: var(--md-ref-typeface-brand);
+  --md-sys-typescale-headline-large-size: 2rem;
+  --md-sys-typescale-headline-large-line-height: calc(2.5rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-headline-large-tracking: 0rem;
+  --md-sys-typescale-headline-large-weight: var(--md-ref-typeface-weight-regular);
+  --md-sys-typescale-headline-large-emphasized-font: var(--md-ref-typeface-brand);
+  --md-sys-typescale-headline-large-emphasized-size: 2rem;
+  --md-sys-typescale-headline-large-emphasized-line-height: calc(2.5rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-headline-large-emphasized-tracking: 0rem;
+  --md-sys-typescale-headline-large-emphasized-weight: var(--md-ref-typeface-weight-medium);
+
+  --md-sys-typescale-headline-medium-font: var(--md-ref-typeface-brand);
+  --md-sys-typescale-headline-medium-size: 1.75rem;
+  --md-sys-typescale-headline-medium-line-height: calc(2.25rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-headline-medium-tracking: 0rem;
+  --md-sys-typescale-headline-medium-weight: var(--md-ref-typeface-weight-regular);
+  --md-sys-typescale-headline-medium-emphasized-font: var(--md-ref-typeface-brand);
+  --md-sys-typescale-headline-medium-emphasized-size: 1.75rem;
+  --md-sys-typescale-headline-medium-emphasized-line-height: calc(2.25rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-headline-medium-emphasized-tracking: 0rem;
+  --md-sys-typescale-headline-medium-emphasized-weight: var(--md-ref-typeface-weight-medium);
+
+  --md-sys-typescale-headline-small-font: var(--md-ref-typeface-brand);
+  --md-sys-typescale-headline-small-size: 1.5rem;
+  --md-sys-typescale-headline-small-line-height: calc(2rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-headline-small-tracking: 0rem;
+  --md-sys-typescale-headline-small-weight: var(--md-ref-typeface-weight-regular);
+  --md-sys-typescale-headline-small-emphasized-font: var(--md-ref-typeface-brand);
+  --md-sys-typescale-headline-small-emphasized-size: 1.5rem;
+  --md-sys-typescale-headline-small-emphasized-line-height: calc(2rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-headline-small-emphasized-tracking: 0rem;
+  --md-sys-typescale-headline-small-emphasized-weight: var(--md-ref-typeface-weight-medium);
+
+  /* --- Title: plain typeface, smaller headers and card titles --- */
+  --md-sys-typescale-title-large-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-title-large-size: 1.375rem;
+  --md-sys-typescale-title-large-line-height: calc(1.75rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-title-large-tracking: 0rem;
+  --md-sys-typescale-title-large-weight: var(--md-ref-typeface-weight-regular);
+  --md-sys-typescale-title-large-emphasized-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-title-large-emphasized-size: 1.375rem;
+  --md-sys-typescale-title-large-emphasized-line-height: calc(1.75rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-title-large-emphasized-tracking: 0rem;
+  --md-sys-typescale-title-large-emphasized-weight: var(--md-ref-typeface-weight-medium);
+
+  --md-sys-typescale-title-medium-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-title-medium-size: 1rem;
+  --md-sys-typescale-title-medium-line-height: calc(1.5rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-title-medium-tracking: calc(0.0125rem * var(--md-sys-typescale-tracking-scale));
+  --md-sys-typescale-title-medium-weight: var(--md-ref-typeface-weight-medium);
+  --md-sys-typescale-title-medium-emphasized-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-title-medium-emphasized-size: 1rem;
+  --md-sys-typescale-title-medium-emphasized-line-height: calc(1.5rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-title-medium-emphasized-tracking: calc(0.009375rem * var(--md-sys-typescale-tracking-scale));
+  --md-sys-typescale-title-medium-emphasized-weight: var(--md-ref-typeface-weight-bold);
+
+  --md-sys-typescale-title-small-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-title-small-size: 0.875rem;
+  --md-sys-typescale-title-small-line-height: calc(1.25rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-title-small-tracking: calc(0.00625rem * var(--md-sys-typescale-tracking-scale));
+  --md-sys-typescale-title-small-weight: var(--md-ref-typeface-weight-medium);
+  --md-sys-typescale-title-small-emphasized-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-title-small-emphasized-size: 0.875rem;
+  --md-sys-typescale-title-small-emphasized-line-height: calc(1.25rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-title-small-emphasized-tracking: calc(0.00625rem * var(--md-sys-typescale-tracking-scale));
+  --md-sys-typescale-title-small-emphasized-weight: var(--md-ref-typeface-weight-bold);
+
+  /* --- Body: plain typeface, running text --- */
+  --md-sys-typescale-body-large-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-body-large-size: 1rem;
+  --md-sys-typescale-body-large-line-height: calc(1.5rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-body-large-tracking: calc(0.03125rem * var(--md-sys-typescale-tracking-scale));
+  --md-sys-typescale-body-large-weight: var(--md-ref-typeface-weight-regular);
+  --md-sys-typescale-body-large-emphasized-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-body-large-emphasized-size: 1rem;
+  --md-sys-typescale-body-large-emphasized-line-height: calc(1.5rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-body-large-emphasized-tracking: calc(0.009375rem * var(--md-sys-typescale-tracking-scale));
+  --md-sys-typescale-body-large-emphasized-weight: var(--md-ref-typeface-weight-medium);
+
+  --md-sys-typescale-body-medium-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-body-medium-size: 0.875rem;
+  --md-sys-typescale-body-medium-line-height: calc(1.25rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-body-medium-tracking: calc(0.0125rem * var(--md-sys-typescale-tracking-scale));
+  --md-sys-typescale-body-medium-weight: var(--md-ref-typeface-weight-regular);
+  --md-sys-typescale-body-medium-emphasized-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-body-medium-emphasized-size: 0.875rem;
+  --md-sys-typescale-body-medium-emphasized-line-height: calc(1.25rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-body-medium-emphasized-tracking: calc(0.015625rem * var(--md-sys-typescale-tracking-scale));
+  --md-sys-typescale-body-medium-emphasized-weight: var(--md-ref-typeface-weight-medium);
+
+  --md-sys-typescale-body-small-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-body-small-size: 0.75rem;
+  --md-sys-typescale-body-small-line-height: calc(1rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-body-small-tracking: calc(0.025rem * var(--md-sys-typescale-tracking-scale));
+  --md-sys-typescale-body-small-weight: var(--md-ref-typeface-weight-regular);
+  --md-sys-typescale-body-small-emphasized-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-body-small-emphasized-size: 0.75rem;
+  --md-sys-typescale-body-small-emphasized-line-height: calc(1rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-body-small-emphasized-tracking: calc(0.025rem * var(--md-sys-typescale-tracking-scale));
+  --md-sys-typescale-body-small-emphasized-weight: var(--md-ref-typeface-weight-medium);
+
+  /* --- Label: plain typeface, buttons, chips, captions --- */
+  --md-sys-typescale-label-large-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-label-large-size: 0.875rem;
+  --md-sys-typescale-label-large-line-height: calc(1.25rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-label-large-tracking: calc(0.00625rem * var(--md-sys-typescale-tracking-scale));
+  --md-sys-typescale-label-large-weight: var(--md-ref-typeface-weight-medium);
+  --md-sys-typescale-label-large-emphasized-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-label-large-emphasized-size: 0.875rem;
+  --md-sys-typescale-label-large-emphasized-line-height: calc(1.25rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-label-large-emphasized-tracking: calc(0.00625rem * var(--md-sys-typescale-tracking-scale));
+  --md-sys-typescale-label-large-emphasized-weight: var(--md-ref-typeface-weight-bold);
+
+  --md-sys-typescale-label-medium-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-label-medium-size: 0.75rem;
+  --md-sys-typescale-label-medium-line-height: calc(1rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-label-medium-tracking: calc(0.03125rem * var(--md-sys-typescale-tracking-scale));
+  --md-sys-typescale-label-medium-weight: var(--md-ref-typeface-weight-medium);
+  --md-sys-typescale-label-medium-emphasized-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-label-medium-emphasized-size: 0.75rem;
+  --md-sys-typescale-label-medium-emphasized-line-height: calc(1rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-label-medium-emphasized-tracking: calc(0.03125rem * var(--md-sys-typescale-tracking-scale));
+  --md-sys-typescale-label-medium-emphasized-weight: var(--md-ref-typeface-weight-bold);
+
+  --md-sys-typescale-label-small-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-label-small-size: 0.6875rem;
+  --md-sys-typescale-label-small-line-height: calc(1rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-label-small-tracking: calc(0.03125rem * var(--md-sys-typescale-tracking-scale));
+  --md-sys-typescale-label-small-weight: var(--md-ref-typeface-weight-medium);
+  --md-sys-typescale-label-small-emphasized-font: var(--md-ref-typeface-plain);
+  --md-sys-typescale-label-small-emphasized-size: 0.6875rem;
+  --md-sys-typescale-label-small-emphasized-line-height: calc(1rem * var(--md-sys-typescale-line-height-scale));
+  --md-sys-typescale-label-small-emphasized-tracking: calc(0.03125rem * var(--md-sys-typescale-tracking-scale));
+  --md-sys-typescale-label-small-emphasized-weight: var(--md-ref-typeface-weight-bold);
+}
+
+/*
+ * Arabic retuning.
+ *
+ * Tracking goes to zero. The M3 type scale's tracking is calibrated for Latin;
+ * applied to Arabic it pushes apart letters that are meant to be cursively
+ * joined, which reads as broken rather than airy. This is why the scale above
+ * routes every tracking value through a multiplier.
+ *
+ * Line height goes up 15%. Noto Sans Arabic carries taller ascenders and
+ * deeper descenders than Google Sans Flex, so Latin-tuned leading crowds
+ * consecutive Arabic lines.
+ *
+ * Keyed on :lang(ar) rather than [dir='rtl'] so an Arabic pull-quote inside an
+ * English page is retuned too, and a Latin caption inside an RTL page is not.
+ */
+:where(:lang(ar)) {
+  --md-sys-typescale-tracking-scale: 0;
+  --md-sys-typescale-line-height-scale: 1.15;
+}

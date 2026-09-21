@@ -1,0 +1,107 @@
+# Skill name  =  Simple Icons slug
+#
+# Fetched into public/skill-icons/ by ./scripts/build-skill-icons.py, which
+# also writes the lookup in src/features/profile/skill-icons.generated.ts.
+#
+# Simple Icons (https://simpleicons.org) rather than thesvg.org: it is CC0, so
+# there is no licence question, and every icon is a single path on a 24x24
+# viewBox with no fill, which is what lets it be tinted with the brand's own
+# colour from the data file.
+#
+# MOST SKILLS WILL NEVER APPEAR HERE, and that is fine. "Humanitarian
+# logistics" and "Monitoring & evaluation" have no logo and never will; KoBo
+# Toolbox, ODK, DHIS2, SPSS and Stata exist in the world but not in Simple
+# Icons. A row where one in eight has a mark looks broken, so the rule is:
+# show an icon only where one exists, reserve no space for the rest, and never
+# substitute a placeholder.
+#
+# Names are matched case-insensitively against the skill text.
+
+# --- Data and analysis ------------------------------------------------------
+Python = python
+R = r
+Pandas = pandas
+NumPy = numpy
+Jupyter = jupyter
+TensorFlow = tensorflow
+Elasticsearch = elastic
+Grafana = grafana
+
+# --- GIS and mapping --------------------------------------------------------
+QGIS = qgis
+ArcGIS = arcgis
+OpenStreetMap = openstreetmap
+Google Earth = googleearth
+
+# --- Office and documents ---------------------------------------------------
+Microsoft Excel = microsoftexcel
+Microsoft Word = microsoftword
+Microsoft PowerPoint = microsoftpowerpoint
+Microsoft Teams = microsoftteams
+Microsoft Outlook = microsoftoutlook
+Power BI = powerbi
+Power Automate = powerautomate
+Google Sheets = googlesheets
+Google Docs = googledocs
+Google Drive = googledrive
+Google Forms = googleforms
+Dropbox = dropbox
+
+# --- Reporting and BI -------------------------------------------------------
+Tableau = tableau
+Looker = looker
+Google Analytics = googleanalytics
+
+# --- Surveys ----------------------------------------------------------------
+SurveyMonkey = surveymonkey
+Typeform = typeform
+
+# --- Project and case management --------------------------------------------
+Jira = jira
+Confluence = confluence
+Trello = trello
+Asana = asana
+Notion = notion
+Airtable = airtable
+ClickUp = clickup
+Redmine = redmine
+Miro = miro
+Zapier = zapier
+
+# --- Communication ----------------------------------------------------------
+Slack = slack
+Zoom = zoom
+WhatsApp = whatsapp
+Telegram = telegram
+Mailchimp = mailchimp
+
+# --- Finance and ERP --------------------------------------------------------
+QuickBooks = quickbooks
+Xero = xero
+Odoo = odoo
+SAP = sap
+Oracle = oracle
+Salesforce = salesforce
+HubSpot = hubspot
+Stripe = stripe
+
+# --- Design -----------------------------------------------------------------
+Figma = figma
+Canva = canva
+Adobe Photoshop = adobephotoshop
+Adobe Illustrator = adobeillustrator
+Adobe InDesign = adobeindesign
+
+# --- Web and engineering ----------------------------------------------------
+JavaScript = javascript
+TypeScript = typescript
+React = react
+PHP = php
+WordPress = wordpress
+PostgreSQL = postgresql
+MySQL = mysql
+MongoDB = mongodb
+Docker = docker
+Linux = linux
+GitHub = github
+GitLab = gitlab

@@ -1,0 +1,154 @@
+/*
+ * Tabs with a filled selected state.
+ *
+ * M3's primary tabs mark selection with a 3px indicator bar under the label.
+ * These fill the selected tab instead — the same `secondary-container` pill
+ * the nav rail uses for "you are here", so one visual idea covers selection
+ * everywhere in the app rather than two.
+ *
+ * The pill slides between tabs on a spatial spring rather than cross-fading,
+ * which is what makes the row read as one control with a moving selection
+ * instead of six independent buttons.
+ */
+
+@layer components {
+  .md-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 6px;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-surface-container);
+  }
+
+  .md-tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-sizing: border-box;
+
+    block-size: 48px;
+    padding-inline: 20px;
+    border: 0;
+    border-radius: var(--md-sys-shape-corner-full);
+    background: none;
+
+    font-family: var(--md-sys-typescale-label-large-font);
+    font-size: var(--md-sys-typescale-label-large-size);
+    line-height: var(--md-sys-typescale-label-large-line-height);
+    font-weight: var(--md-sys-typescale-label-large-weight);
+    letter-spacing: var(--md-sys-typescale-label-large-tracking);
+
+    color: var(--md-sys-color-on-surface-variant);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+
+    transition-property: color, font-weight, border-radius;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-default-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-default-effects-duration);
+  }
+
+  .md-tab .md-icon {
+    --md-icon-size: 20px;
+    --md-icon-opsz: 20;
+    position: relative;
+    z-index: 1;
+  }
+
+  /*
+   * Only the label. This used to be `.md-tab > span`, which also matched
+   * .md-tab__indicator - and at (0,1,1) it outranked that rule's own (0,1,0),
+   * replacing `position: absolute` with `relative`. The pill collapsed to a
+   * zero-size inline box and never appeared.
+   */
+  .md-tab__label {
+    position: relative;
+    z-index: 1;
+  }
+
+  .md-tab[aria-selected='true'] {
+    color: var(--md-sys-color-on-secondary-container);
+    font-weight: var(--md-sys-typescale-label-large-emphasized-weight);
+    --md-icon-fill: 1;
+  }
+
+  /* Hover fills the icon but not the pill — fill alone would read as selected. */
+  .md-tab:hover,
+  .md-tab:focus-visible {
+    --md-icon-fill: 1;
+    color: var(--md-sys-color-on-surface);
+  }
+
+  .md-tab:active {
+    border-radius: var(--md-sys-shape-corner-medium);
+  }
+
+  /*
+   * The moving pill. One element positioned by Motion's layout animation, so
+   * it travels between tabs rather than appearing in the new one.
+   */
+  .md-tab__indicator {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-secondary-container);
+  }
+
+  .md-tab__state {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    background-color: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    transition-property: opacity;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-fast-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-fast-effects-duration);
+  }
+
+  .md-tab:hover .md-tab__state {
+    opacity: var(--md-sys-state-hover-state-layer-opacity);
+  }
+
+  .md-tab:focus-visible .md-tab__state {
+    opacity: var(--md-sys-state-focus-state-layer-opacity);
+  }
+
+  .md-tab:active .md-tab__state {
+    opacity: var(--md-sys-state-pressed-state-layer-opacity);
+  }
+
+  /* An unmet requirement. The only always-visible cue for what is missing. */
+  .md-tab__dot {
+    position: relative;
+    z-index: 1;
+    inline-size: 6px;
+    block-size: 6px;
+    flex: none;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-error);
+  }
+
+  /* What a CV just put on this tab. Replaces the dot while it is there. */
+  .md-tab__badge {
+    position: relative;
+    z-index: 1;
+    flex: none;
+    min-inline-size: 20px;
+    block-size: 20px;
+    padding-inline: 6px;
+    box-sizing: border-box;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    font-size: var(--md-sys-typescale-label-small-size);
+    line-height: 20px;
+    font-weight: var(--md-sys-typescale-label-medium-emphasized-weight);
+    letter-spacing: normal;
+    text-align: center;
+  }
+}

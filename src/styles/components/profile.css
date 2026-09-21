@@ -1,0 +1,771 @@
+/*
+ * The profile page: a centred column, the header that carries progress and
+ * saving, and the shared shapes the six panels are built from.
+ */
+
+@layer components {
+  .profile {
+    inline-size: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* --- Header --- */
+
+  .profile__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    margin-block-end: 24px;
+  }
+
+  .profile__progress {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-inline-size: 0;
+  }
+
+  .profile__progress h1 {
+    margin: 0;
+    font-family: var(--md-sys-typescale-headline-medium-font);
+    font-size: var(--md-sys-typescale-headline-medium-size);
+    line-height: var(--md-sys-typescale-headline-medium-line-height);
+    font-weight: var(--md-sys-typescale-headline-medium-weight);
+    letter-spacing: var(--md-sys-typescale-headline-medium-tracking);
+  }
+
+  /* Pulled back so the label aligns with the heading above it, not its padding. */
+  .profile__whats-left {
+    margin-inline-start: -12px;
+    block-size: 32px;
+  }
+
+  .profile__save {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: none;
+  }
+
+  .profile__save p {
+    margin: 0;
+    font-size: var(--md-sys-typescale-body-medium-size);
+    line-height: var(--md-sys-typescale-body-medium-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  /* --- Panels --- */
+
+  .profile__panel {
+    padding-block-start: 28px;
+  }
+
+  .profile__section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    /*
+     * The first row's floating labels sit 8px above their boxes, so this gap
+     * is 8px smaller than it looks. 32 leaves 24 of real daylight.
+     */
+    margin-block-end: 32px;
+  }
+
+  /* Not the first section on a tab, so it needs air above it. */
+  .profile__section-head:not(:first-child) {
+    margin-block-start: 32px;
+  }
+
+  .profile__section-title {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-inline-size: 0;
+  }
+
+  .profile__section-title h2 {
+    margin: 0;
+    font-family: var(--md-sys-typescale-title-large-font);
+    font-size: var(--md-sys-typescale-title-large-size);
+    line-height: var(--md-sys-typescale-title-large-line-height);
+    font-weight: var(--md-sys-typescale-title-large-weight);
+    letter-spacing: var(--md-sys-typescale-title-large-tracking);
+  }
+
+  .profile__blurb {
+    font-size: var(--md-sys-typescale-body-medium-size);
+    line-height: var(--md-sys-typescale-body-medium-line-height);
+    letter-spacing: var(--md-sys-typescale-body-medium-tracking);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .profile__needed {
+    display: inline-flex;
+    align-items: center;
+    block-size: 24px;
+    padding-inline: 10px;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-error-container);
+    color: var(--md-sys-color-on-error-container);
+    font-size: var(--md-sys-typescale-label-small-size);
+    font-weight: var(--md-sys-typescale-label-small-emphasized-weight);
+    letter-spacing: normal;
+  }
+
+  /*
+   * Two equal columns. auto-fit was tried and reverted: it sized cells to the
+   * available space, so a cell holding two controls came out narrower than one
+   * holding a single field and the column edges stopped lining up.
+   *
+   * row-gap is 36px, not 28: a field with helper text is taller than its
+   * neighbour, and the floating label of the row below sits 8px ABOVE its
+   * box - so 28px of grid gap left only ~12px of daylight and the label
+   * appeared to touch the helper text above it.
+   */
+  .profile__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 24px;
+    row-gap: 36px;
+  }
+
+  .profile__span-2 {
+    grid-column: 1 / -1;
+  }
+
+  .profile__period {
+    display: flex;
+    align-items: start;
+    gap: 12px;
+    min-inline-size: 0;
+  }
+
+  .profile__phone-row {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+    min-inline-size: 0;
+  }
+
+  /* The dialling code: a button, so it can hold a flag and open a picker. */
+  .profile__dial {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex: none;
+    block-size: 56px;
+    padding-inline: 14px 10px;
+    border: 1px solid var(--md-sys-color-outline);
+    border-radius: var(--md-sys-shape-corner-extra-small);
+    background: none;
+    color: var(--md-sys-color-on-surface);
+    font-family: inherit;
+    font-size: var(--md-sys-typescale-body-large-size);
+    letter-spacing: var(--md-sys-typescale-body-large-tracking);
+    cursor: pointer;
+
+    transition:
+      border-color var(--md-sys-motion-duration-short4)
+        var(--md-sys-motion-easing-standard),
+      box-shadow var(--md-sys-motion-duration-short4)
+        var(--md-sys-motion-easing-standard);
+  }
+
+  .profile__dial:hover {
+    border-color: var(--md-sys-color-on-surface);
+  }
+
+  .profile__dial:focus-visible {
+    outline: none;
+    border-color: var(--md-sys-color-primary);
+    box-shadow: inset 0 0 0 1px var(--md-sys-color-primary);
+  }
+
+  .profile__phone-number {
+    flex-grow: 1;
+    min-inline-size: 0;
+    box-sizing: border-box;
+    block-size: 56px;
+    padding-inline: 16px;
+    border: 1px solid var(--md-sys-color-outline);
+    border-radius: var(--md-sys-shape-corner-extra-small);
+    background: none;
+    color: var(--md-sys-color-on-surface);
+    font-family: var(--md-sys-typescale-body-large-font);
+    font-size: var(--md-sys-typescale-body-large-size);
+    letter-spacing: var(--md-sys-typescale-body-large-tracking);
+
+    transition:
+      border-color var(--md-sys-motion-duration-short4)
+        var(--md-sys-motion-easing-standard),
+      box-shadow var(--md-sys-motion-duration-short4)
+        var(--md-sys-motion-easing-standard);
+  }
+
+  .profile__phone-number:focus {
+    outline: none;
+    border-color: var(--md-sys-color-primary);
+    box-shadow: inset 0 0 0 1px var(--md-sys-color-primary);
+  }
+
+  /* An M3 switch, not a browser checkbox. */
+  .profile__switch-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    align-self: center;
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+  }
+
+  /* --- Lists and shared shapes --- */
+
+  .profile__stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* An open panel sits on a container surface, so its fields must match it. */
+  .md-panel--open .profile__grid {
+    --md-field-surface: var(--md-sys-color-surface-container-low);
+  }
+
+  .profile__entry-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-block-start: 20px;
+  }
+
+  .profile__callout {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 16px;
+    padding: 14px 20px;
+    border-radius: var(--md-sys-shape-corner-medium);
+    background-color: var(--md-sys-color-surface-container);
+    font-size: var(--md-sys-typescale-body-medium-size);
+    line-height: var(--md-sys-typescale-body-medium-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .profile__callout .md-icon {
+    color: var(--md-sys-color-primary);
+  }
+
+  .profile__callout strong {
+    color: var(--md-sys-color-on-surface);
+    font-weight: var(--md-sys-typescale-label-large-emphasized-weight);
+  }
+
+  .profile__empty {
+    margin: 0;
+    padding: 32px;
+    border: 1px dashed var(--md-sys-color-outline);
+    border-radius: var(--md-sys-shape-corner-large);
+    text-align: center;
+    font-size: var(--md-sys-typescale-body-medium-size);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .profile__chips {
+    margin-block-end: 8px;
+  }
+
+  /* --- Languages --- */
+
+  .profile__languages {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .profile__languages li {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 14px;
+    border: 1px solid var(--md-sys-color-outline-variant);
+    border-radius: var(--md-sys-shape-corner-medium);
+  }
+
+  /* The empty state is a row in this list too, so it must not wear its chrome. */
+  .profile__languages li:has(.profile__empty) {
+    padding: 0;
+    border: 0;
+  }
+
+  .profile__language-name {
+    inline-size: 150px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+  }
+
+  /* --- CVs --- */
+
+  .profile__cv {
+    padding: 16px 20px;
+    border: 1px solid var(--md-sys-color-outline-variant);
+    border-radius: var(--md-sys-shape-corner-large);
+  }
+
+  .profile__cv-head {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .profile__cv-head h3 {
+    margin: 0;
+    font-family: var(--md-sys-typescale-title-medium-font);
+    font-size: var(--md-sys-typescale-title-medium-size);
+    line-height: var(--md-sys-typescale-title-medium-line-height);
+    font-weight: var(--md-sys-typescale-title-medium-weight);
+    letter-spacing: var(--md-sys-typescale-title-medium-tracking);
+  }
+
+  .profile__cv-meta {
+    margin-inline-start: auto;
+    font-size: var(--md-sys-typescale-body-small-size);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .profile__cv-state {
+    margin: 8px 0 0;
+    font-size: var(--md-sys-typescale-body-medium-size);
+    line-height: var(--md-sys-typescale-body-medium-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .profile__cv-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 12px 0 0;
+    padding: 12px 14px;
+    border-radius: var(--md-sys-shape-corner-medium);
+    background-color: var(--md-sys-color-surface-container-high);
+    font-size: var(--md-sys-typescale-body-medium-size);
+    line-height: var(--md-sys-typescale-body-medium-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .profile__cv-error .md-icon {
+    color: var(--md-sys-color-error);
+    margin-block-start: 2px;
+  }
+
+  .profile__cv-error strong {
+    color: var(--md-sys-color-on-surface);
+  }
+
+  .profile__cv-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-block-start: 14px;
+  }
+
+  .profile__badge {
+    display: inline-flex;
+    align-items: center;
+    block-size: 24px;
+    padding-inline: 10px;
+    border-radius: var(--md-sys-shape-corner-full);
+    font-size: var(--md-sys-typescale-label-small-size);
+    font-weight: var(--md-sys-typescale-label-small-emphasized-weight);
+    letter-spacing: normal;
+  }
+
+  .profile__badge--active {
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+  }
+
+  .profile__badge--waiting {
+    border: 1px solid var(--md-sys-color-outline-variant);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .profile__badge--ended {
+    background-color: var(--md-sys-color-error-container);
+    color: var(--md-sys-color-on-error-container);
+  }
+
+  /* --- What's left --- */
+
+  .profile__checklist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .profile__checklist button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    inline-size: 100%;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: var(--md-sys-shape-corner-medium);
+    background: none;
+    color: var(--md-sys-color-on-surface);
+    font: inherit;
+    font-weight: var(--md-sys-typescale-label-large-emphasized-weight);
+    text-align: start;
+    cursor: pointer;
+  }
+
+  .profile__checklist button:hover {
+    background-color: var(--md-sys-color-surface-container-highest);
+  }
+
+  .profile__checklist button.is-met {
+    color: var(--md-sys-color-on-surface-variant);
+    font-weight: var(--md-sys-typescale-body-medium-weight);
+  }
+
+  .profile__tick {
+    display: grid;
+    place-items: center;
+    inline-size: 20px;
+    block-size: 20px;
+    flex: none;
+    border: 1px solid var(--md-sys-color-outline);
+    border-radius: var(--md-sys-shape-corner-full);
+  }
+
+  .is-met .profile__tick {
+    border-color: var(--md-sys-color-primary);
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+  }
+
+  .profile__tick-state {
+    margin-inline-start: auto;
+    font-size: var(--md-sys-typescale-label-small-size);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .profile__searchable {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-block-start: 20px;
+    padding-block-start: 20px;
+    border-block-start: 1px solid var(--md-sys-color-outline-variant);
+  }
+
+  .profile__searchable-title {
+    margin: 0;
+    font-size: var(--md-sys-typescale-body-large-size);
+    color: var(--md-sys-color-on-surface);
+  }
+
+  .profile__searchable-help {
+    margin: 2px 0 0;
+    font-size: var(--md-sys-typescale-body-small-size);
+    line-height: var(--md-sys-typescale-body-small-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  /* Narrow panes: one column, and the header stacks. */
+  @media (max-width: 900px) {
+    .profile__header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+}
+
+@layer components {
+  /*
+   * Start and end dates share one full-width row, so revealing the end pair
+   * fills space that already exists instead of pushing anything down.
+   */
+  .profile__dates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    min-inline-size: 0;
+  }
+
+  .profile__dates > * {
+    flex: 1 1 280px;
+    min-inline-size: 0;
+  }
+
+  /* The switch row is its own line, above the dates. */
+  .profile__switch-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+  }
+}
+
+/* --- What a CV filled in --- */
+
+@layer components {
+  /* Which CV you are looking at, under the page title. */
+  .profile__source {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 2px 0 0;
+    font-size: var(--md-sys-typescale-body-small-size);
+    line-height: var(--md-sys-typescale-body-small-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .profile__source--from {
+    color: var(--md-sys-color-primary);
+    --md-icon-fill: 1;
+  }
+
+  .profile__source button {
+    border: 0;
+    padding: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-weight: var(--md-sys-typescale-label-large-emphasized-weight);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+
+  /*
+   * A field a CV filled: the outline and its help line take the primary role,
+   * so you can see at a glance which values are the file's and which are
+   * yours — and the help line says what it replaced.
+   */
+  .is-from-cv .md-field__control,
+  .is-from-cv .profile__phone-row {
+    border-color: var(--md-sys-color-primary);
+  }
+
+  .is-from-cv .md-field__help {
+    color: var(--md-sys-color-primary);
+  }
+}
+
+/* --- Watching a CV be read (draft B) --- */
+
+@layer components {
+  .reading {
+    inline-size: min(760px, calc(100vw - 48px));
+    padding: 28px 30px 24px;
+    background-color: var(--md-sys-color-surface-container-low);
+  }
+
+  .reading__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-block-end: 22px;
+  }
+
+  .reading__head > div {
+    flex-grow: 1;
+    min-inline-size: 0;
+  }
+
+  .reading__head h2 {
+    margin: 0;
+    font-family: var(--md-sys-typescale-title-large-font);
+    font-size: var(--md-sys-typescale-title-large-size);
+    line-height: var(--md-sys-typescale-title-large-line-height);
+    font-weight: var(--md-sys-typescale-title-large-weight);
+    overflow-wrap: anywhere;
+  }
+
+  .reading__head p {
+    margin: 3px 0 0;
+    font-size: var(--md-sys-typescale-body-medium-size);
+    line-height: var(--md-sys-typescale-body-medium-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .reading__mark {
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: 52px;
+    block-size: 52px;
+    border-radius: var(--md-sys-shape-corner-large);
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+    --md-icon-fill: 1;
+  }
+
+  /* The three states the API really has. */
+  .reading__steps {
+    list-style: none;
+    margin: 0 0 18px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .reading__steps li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--md-sys-typescale-body-medium-size);
+    color: var(--md-sys-color-outline);
+  }
+
+  .reading__steps li:not(:last-child)::after {
+    content: '';
+    inline-size: 28px;
+    block-size: 2px;
+    border-radius: 2px;
+    background-color: var(--md-sys-color-outline-variant);
+  }
+
+  .reading__steps .is-done,
+  .reading__steps .is-now {
+    color: var(--md-sys-color-on-surface);
+  }
+
+  .reading__steps .is-now {
+    font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  }
+
+  .reading__tick {
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: 24px;
+    block-size: 24px;
+    border: 2px solid var(--md-sys-color-outline-variant);
+    border-radius: var(--md-sys-shape-corner-full);
+    color: var(--md-sys-color-on-primary);
+
+    transition-property: background-color, border-color;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-default-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-default-effects-duration);
+  }
+
+  .is-done > .reading__tick,
+  .is-found > .reading__tick {
+    border-color: var(--md-sys-color-primary);
+    background-color: var(--md-sys-color-primary);
+  }
+
+  .is-now > .reading__tick,
+  .is-next > .reading__tick {
+    border-color: var(--md-sys-color-primary);
+  }
+
+  .reading__bar {
+    block-size: 6px;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-surface-container-high);
+    overflow: hidden;
+  }
+
+  .reading__bar span {
+    display: block;
+    block-size: 100%;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-primary);
+  }
+
+  .reading__label {
+    margin: 16px 0 12px;
+    font-size: var(--md-sys-typescale-body-small-size);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  /* What came out of the file, a line at a time. */
+  .reading__found {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 32px;
+  }
+
+  .reading__found li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    color: var(--md-sys-color-outline);
+
+    transition: color var(--md-sys-motion-duration-medium1)
+      var(--md-sys-motion-easing-standard);
+  }
+
+  .reading__found li > span {
+    min-inline-size: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .reading__found .is-found,
+  .reading__found .is-next {
+    color: var(--md-sys-color-on-surface);
+  }
+
+  .reading__found-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+    font-weight: var(--md-sys-typescale-title-medium-weight);
+  }
+
+  .reading__found-detail {
+    font-size: var(--md-sys-typescale-body-small-size);
+    line-height: var(--md-sys-typescale-body-small-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+    overflow-wrap: anywhere;
+  }
+
+  .reading__actions {
+    margin-block-start: 24px;
+    padding-block-start: 20px;
+    border-block-start: 1px solid var(--md-sys-color-outline-variant);
+  }
+
+  .reading__actions p {
+    margin: 0 0 16px;
+    font-size: var(--md-sys-typescale-body-medium-size);
+    line-height: var(--md-sys-typescale-body-medium-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .reading__actions div {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+}

@@ -1,0 +1,460 @@
+/*
+ * The job posting.
+ *
+ * Draft C's layout — one header, three tabs, and the last tab is the
+ * application itself — with draft B's apply card standing on the right, so
+ * Apply and what goes with it are reachable from every tab.
+ *
+ * Kept in its own file rather than added to jobs.css: the listing and the
+ * posting share nothing but the employer mark, and a file each is easier to
+ * change without touching the other.
+ */
+
+@layer components {
+  .job {
+    inline-size: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .job__back {
+    align-self: flex-start;
+    margin-inline-start: -12px;
+  }
+
+  /* --- The band: the whole decision, above the tabs --- */
+
+  .job__band {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin: 16px 0 22px;
+    padding: 22px 26px;
+    border-radius: var(--md-sys-shape-corner-extra-large-increased);
+    background-color: var(--md-sys-color-surface-container-low);
+  }
+
+  /* What the role is, in chips, rather than a column with nothing under it. */
+  .job__facts {
+    list-style: none;
+    margin: 14px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .job__facts li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    block-size: 34px;
+    padding-inline: 14px;
+    border-radius: var(--md-sys-shape-corner-small);
+    background-color: var(--md-sys-color-surface-container-high);
+    color: var(--md-sys-color-on-surface-variant);
+    font-size: var(--md-sys-typescale-body-medium-size);
+  }
+
+  /* Apply, what goes with it, and the dates — the end of the same line. */
+  .job__act {
+    flex: none;
+    max-inline-size: 360px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    text-align: end;
+  }
+
+  .job__sends {
+    margin: 0;
+    font-size: var(--md-sys-typescale-body-small-size);
+    line-height: var(--md-sys-typescale-body-small-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .job__logo {
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: 64px;
+    block-size: 64px;
+    border-radius: var(--md-sys-shape-corner-large);
+    font-family: var(--md-sys-typescale-title-large-font);
+    font-size: var(--md-sys-typescale-title-medium-size);
+    font-weight: var(--md-sys-typescale-title-large-emphasized-weight);
+    letter-spacing: normal;
+  }
+
+  .job__ident {
+    min-inline-size: 0;
+    flex-grow: 1;
+  }
+
+  .job__ident h1 {
+    margin: 0;
+    font-family: var(--md-sys-typescale-headline-medium-font);
+    font-size: var(--md-sys-typescale-headline-medium-size);
+    line-height: var(--md-sys-typescale-headline-medium-line-height);
+    font-weight: var(--md-sys-typescale-headline-medium-weight);
+    letter-spacing: var(--md-sys-typescale-headline-medium-tracking);
+  }
+
+  .job__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 6px 0 0;
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .job__dates {
+    flex: none;
+    margin: 6px 0 0;
+    font-size: var(--md-sys-typescale-body-small-size);
+    line-height: var(--md-sys-typescale-body-small-line-height);
+    color: var(--md-sys-color-outline);
+  }
+
+  /* --- Body: one column, under the centred tabs --- */
+
+  .job__body {
+    margin-block-start: 28px;
+  }
+
+  /*
+   * Every tab's panel is the same width and centred under the tab row, so the
+   * reading line neither jumps between tabs nor sits against one edge with
+   * the rest of the screen empty.
+   */
+  .job__description,
+  .job__asks,
+  .job__form,
+  .job__sent {
+    inline-size: 100%;
+    max-inline-size: 820px;
+    margin-inline: auto;
+  }
+
+  @media (max-width: 900px) {
+    .job__band {
+      flex-wrap: wrap;
+    }
+
+    .job__act {
+      max-inline-size: none;
+      inline-size: 100%;
+      align-items: stretch;
+      text-align: start;
+    }
+  }
+
+  /* --- About --- */
+
+  .job__description p {
+    margin: 0 0 18px;
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: 26px;
+  }
+
+  .job__description h2 {
+    margin: 26px 0 10px;
+    font-family: var(--md-sys-typescale-title-medium-font);
+    font-size: var(--md-sys-typescale-title-medium-size);
+    line-height: var(--md-sys-typescale-title-medium-line-height);
+    font-weight: var(--md-sys-typescale-title-medium-emphasized-weight);
+  }
+
+  .job__description ul {
+    /* base.css strips markers from every list; a description needs them. */
+    list-style: disc;
+    margin: 0;
+    padding-inline-start: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: 24px;
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  /* --- Requirements --- */
+
+  .job__asks {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  .job__experience {
+    margin: 0;
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+  }
+
+  .job__criteria h3 {
+    margin: 0 0 4px;
+    font-size: var(--md-sys-typescale-label-medium-size);
+    line-height: var(--md-sys-typescale-label-medium-line-height);
+    font-weight: var(--md-sys-typescale-label-medium-emphasized-weight);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .job__criteria ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .job__criteria li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 4px 24px;
+    padding-block: 13px;
+    border-block-start: 1px solid var(--md-sys-color-outline-variant);
+  }
+
+  .job__criteria li > span:first-child {
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+  }
+
+  .job__criteria li > span:last-child {
+    font-size: var(--md-sys-typescale-body-small-size);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  /* --- Questions: the application itself --- */
+
+  /* The tab is called Questions, so it opens on the questions. */
+  .job__questions {
+    display: flex;
+    flex-direction: column;
+    /* Room between them: they are separate things to answer, not a list. */
+    gap: 44px;
+  }
+
+  /*
+   * A question is centred on the column: the question, the shape line under
+   * it and the control. The answer box keeps its text ranged left — you are
+   * typing into it, and centred prose under a cursor is unreadable.
+   */
+  .job__question {
+    text-align: center;
+  }
+
+  .job__question-text {
+    margin: 0;
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+  }
+
+  /*
+   * The shape line and the error share one slot, so a question that goes
+   * invalid does not grow taller and shove the next one down.
+   */
+  .job__question-shape {
+    margin: 2px 0 10px;
+    font-size: var(--md-sys-typescale-body-small-size);
+    line-height: var(--md-sys-typescale-body-small-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+
+    transition: color var(--md-sys-motion-duration-short4)
+      var(--md-sys-motion-easing-standard);
+  }
+
+  /* Yes and No do not need the width of a paragraph answer. */
+  .job__question .md-segmented {
+    max-inline-size: 320px;
+    margin-inline: auto;
+  }
+
+  /* A short answer is an .md-field, which carries its own error styling. */
+  .job__question--error .job__question-shape {
+    color: var(--md-sys-color-error);
+  }
+
+  .job__form-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-block-start: 44px;
+  }
+
+  /* --- Application sent --- */
+
+  .job__sent {
+    padding: 40px 32px;
+    border: 1px solid var(--md-sys-color-outline-variant);
+    border-radius: var(--md-sys-shape-corner-extra-large);
+    text-align: center;
+  }
+
+  .job__sent-mark {
+    display: inline-grid;
+    place-items: center;
+    inline-size: 64px;
+    block-size: 64px;
+    margin-block-end: 18px;
+    border-radius: var(--md-sys-shape-corner-large);
+    background-color: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-on-primary-container);
+    --md-icon-fill: 1;
+  }
+
+  .job__sent h2 {
+    margin: 0;
+    font-family: var(--md-sys-typescale-headline-small-font);
+    font-size: var(--md-sys-typescale-headline-small-size);
+    line-height: var(--md-sys-typescale-headline-small-line-height);
+    font-weight: var(--md-sys-typescale-headline-small-weight);
+  }
+
+  .job__sent p {
+    margin: 8px 0 0;
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  /* --- Apply --- */
+
+  .job__apply-button,
+  .job__signed-out .md-button {
+    inline-size: 100%;
+    justify-content: center;
+    block-size: 56px;
+    padding-inline: 32px;
+  }
+
+  .job__signed-out p {
+    margin: 10px 0 0;
+    font-size: var(--md-sys-typescale-body-small-size);
+    line-height: var(--md-sys-typescale-body-small-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .job__sent-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: var(--md-sys-shape-corner-large);
+    background-color: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-on-primary-container);
+    --md-icon-fill: 1;
+  }
+
+  .job__sent-card p {
+    margin: 0;
+    font-size: var(--md-sys-typescale-body-small-size);
+    line-height: var(--md-sys-typescale-body-small-line-height);
+  }
+
+  .job__sent-title {
+    font-size: var(--md-sys-typescale-title-small-size) !important;
+    line-height: var(--md-sys-typescale-title-small-line-height) !important;
+    font-weight: var(--md-sys-typescale-title-small-emphasized-weight);
+  }
+
+  /* The inline link the repo uses inside its alert and its sent message. */
+  .job__sent-card button,
+  .job__sent p button {
+    border: 0;
+    padding: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-weight: var(--md-sys-typescale-body-medium-emphasized-weight);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+  }
+
+  .job__sent p button {
+    color: var(--md-sys-color-primary);
+  }
+
+  .job__facts .md-icon,
+  .job__facts img {
+    flex: none;
+  }
+}
+
+/* --- Which CV goes with this application --- */
+
+@layer components {
+  .job__cvs {
+    list-style: none;
+    margin: 20px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .job__cv-choice {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    inline-size: 100%;
+    box-sizing: border-box;
+    padding: 12px 16px;
+    border: 1px solid var(--md-sys-color-outline-variant);
+    border-radius: var(--md-sys-shape-corner-large);
+    background: none;
+    color: var(--md-sys-color-on-surface);
+    font-family: inherit;
+    text-align: start;
+    cursor: pointer;
+
+    transition:
+      background-color var(--md-sys-motion-duration-short4)
+        var(--md-sys-motion-easing-standard),
+      border-color var(--md-sys-motion-duration-short4)
+        var(--md-sys-motion-easing-standard);
+  }
+
+  .job__cv-choice:hover {
+    background-color: var(--md-sys-color-surface-container-highest);
+  }
+
+  .job__cv-choice--on {
+    border-color: transparent;
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+    --md-icon-fill: 1;
+  }
+
+  .job__cv-choice > span {
+    flex-grow: 1;
+    min-inline-size: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .job__cv-name {
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+    font-weight: var(--md-sys-typescale-title-medium-weight);
+  }
+
+  .job__cv-meta {
+    font-size: var(--md-sys-typescale-body-small-size);
+    line-height: var(--md-sys-typescale-body-small-line-height);
+    opacity: 0.8;
+  }
+
+  .job__cv-choice .md-icon {
+    flex: none;
+  }
+}

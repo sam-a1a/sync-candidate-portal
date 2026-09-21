@@ -1,0 +1,137 @@
+/*
+ * Utilities for the parts of M3 that a token alone cannot express - state
+ * layers, elevation pairs, and the motion harnesses.
+ *
+ * Declared with Tailwind v4's `@utility`, so they compose with variants
+ * (`hover:`, `md:`, `rtl:`) like any built-in utility.
+ */
+
+/* --- Elevation ------------------------------------------------------------
+ * Shadows only. Tonal elevation is just a surface role, so it needs no
+ * utility: use `bg-surface-container-high` and friends.
+ */
+@utility md-elevation-0 {
+  box-shadow: var(--md-sys-elevation-shadow-level0);
+}
+@utility md-elevation-1 {
+  box-shadow: var(--md-sys-elevation-shadow-level1);
+}
+@utility md-elevation-2 {
+  box-shadow: var(--md-sys-elevation-shadow-level2);
+}
+@utility md-elevation-3 {
+  box-shadow: var(--md-sys-elevation-shadow-level3);
+}
+@utility md-elevation-4 {
+  box-shadow: var(--md-sys-elevation-shadow-level4);
+}
+@utility md-elevation-5 {
+  box-shadow: var(--md-sys-elevation-shadow-level5);
+}
+
+/* --- State layer ----------------------------------------------------------
+ * An M3 interaction state is a translucent wash of the element's own content
+ * colour over its container - never a second container colour. Using
+ * currentColor means one utility is correct on every component in every
+ * scheme and contrast level.
+ *
+ * `border-radius: inherit` keeps the wash inside a shape that morphs.
+ */
+@utility md-state-layer {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity var(--md-sys-motion-spring-expressive-fast-effects-duration)
+      var(--md-sys-motion-spring-expressive-fast-effects);
+  }
+
+  &:hover::after {
+    opacity: var(--md-sys-state-hover-state-layer-opacity);
+  }
+
+  &:focus-visible::after {
+    opacity: var(--md-sys-state-focus-state-layer-opacity);
+  }
+
+  &:active::after {
+    opacity: var(--md-sys-state-pressed-state-layer-opacity);
+  }
+
+  &:disabled::after,
+  &[aria-disabled='true']::after {
+    opacity: 0;
+  }
+}
+
+/* --- Springs --------------------------------------------------------------
+ * Pair a transition with the matching spring easing AND its settle duration -
+ * a spring's curve and its duration are one fact, so they are set together.
+ *
+ * `spatial` moves things and overshoots. `effects` is critically damped and is
+ * what colour and opacity must use, since overshoot there means a flash of an
+ * out-of-range value. These expose the `expressive` scheme; the `standard`
+ * scheme is available as tokens if a surface needs to feel more utilitarian.
+ */
+@utility md-spring-spatial {
+  transition-timing-function: var(--md-sys-motion-spring-expressive-default-spatial);
+  transition-duration: var(--md-sys-motion-spring-expressive-default-spatial-duration);
+}
+@utility md-spring-spatial-fast {
+  transition-timing-function: var(--md-sys-motion-spring-expressive-fast-spatial);
+  transition-duration: var(--md-sys-motion-spring-expressive-fast-spatial-duration);
+}
+@utility md-spring-spatial-slow {
+  transition-timing-function: var(--md-sys-motion-spring-expressive-slow-spatial);
+  transition-duration: var(--md-sys-motion-spring-expressive-slow-spatial-duration);
+}
+@utility md-spring-effects {
+  transition-timing-function: var(--md-sys-motion-spring-expressive-default-effects);
+  transition-duration: var(--md-sys-motion-spring-expressive-default-effects-duration);
+}
+@utility md-spring-effects-fast {
+  transition-timing-function: var(--md-sys-motion-spring-expressive-fast-effects);
+  transition-duration: var(--md-sys-motion-spring-expressive-fast-effects-duration);
+}
+@utility md-spring-effects-slow {
+  transition-timing-function: var(--md-sys-motion-spring-expressive-slow-effects);
+  transition-duration: var(--md-sys-motion-spring-expressive-slow-effects-duration);
+}
+
+/* --- Type motion ----------------------------------------------------------
+ * The harness for animating the variable font axes. Apply this, then change
+ * `font-weight` / `--md-sys-typeface-rond` / `--md-sys-typeface-grad` in the
+ * state you care about and the axes interpolate instead of snapping.
+ *
+ * On Arabic only font-weight moves: Noto Sans Arabic has no ROND or GRAD axis
+ * (google/fonts#10442), so those two simply have no effect there. The same
+ * markup stays valid in both scripts, it is just quieter in Arabic.
+ *
+ * GRAD is the axis worth knowing about: it changes stroke weight WITHOUT
+ * changing advance widths, so emphasising text with it never reflows the line.
+ * wght does change metrics - animate it on a heading, think twice in a
+ * paragraph.
+ */
+@utility md-type-motion {
+  transition-property:
+    font-weight, letter-spacing, --md-sys-typeface-rond, --md-sys-typeface-grad;
+  transition-timing-function: var(--md-sys-motion-spring-expressive-default-spatial);
+  transition-duration: var(--md-sys-motion-spring-expressive-default-spatial-duration);
+}
+
+/* --- Shape morph ----------------------------------------------------------
+ * Expressive components change shape on interaction. Anchor both ends of the
+ * morph to the shape scale rather than to literal radii.
+ */
+@utility md-shape-morph {
+  transition-property: border-radius;
+  transition-timing-function: var(--md-sys-motion-spring-expressive-fast-spatial);
+  transition-duration: var(--md-sys-motion-spring-expressive-fast-spatial-duration);
+}

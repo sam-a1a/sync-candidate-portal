@@ -1,0 +1,69 @@
+# Material Symbols used by the app.
+#
+# Names come from https://fonts.google.com/icons (Material Symbols Rounded).
+# Adding a line here and re-running ./scripts/build-fonts.sh subsets the icon
+# into the font and adds it to the IconName union in
+# src/components/icons.generated.ts - so a typo in <Icon name> is a type error,
+# and an icon nobody uses costs nothing.
+
+# Rail: primary action
+search
+
+# Rail: destinations
+work
+double_arrow
+description
+person
+
+# Rail: bottom cluster
+notifications
+light_mode
+dark_mode
+account_circle
+settings
+logout
+
+# Profile tabs
+school
+language
+link
+
+# Entries and expansion panels
+expand_more
+expand_less
+edit
+delete
+
+# CVs
+upload_file
+download
+auto_awesome
+star
+undo
+error
+
+# Jobs and applications
+bookmark
+location_on
+schedule
+arrow_forward
+arrow_back
+business_center
+filter_list
+
+# Job posting
+send
+checklist
+help
+
+# Account
+photo_camera
+visibility
+visibility_off
+
+# General
+add
+check
+chevron_left
+chevron_right
+close

@@ -1,0 +1,76 @@
+/*
+ * Wavy circular progress. The geometry is computed in WavyProgress.tsx; this
+ * is only colour and the centred slot.
+ */
+
+@layer components {
+  .md-wavy-progress {
+    position: relative;
+    flex: none;
+    display: grid;
+    place-items: center;
+  }
+
+  .md-wavy-progress svg {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .md-wavy-progress__track {
+    stroke: var(--md-sys-color-secondary-container);
+  }
+
+  .md-wavy-progress__active {
+    stroke: var(--md-sys-color-primary);
+
+    /*
+     * The waves travel. This is what makes it a *wavy* indicator rather than
+     * a ring with a bumpy edge, and it is easy to miss: the wave is a full
+     * 360 degree path that ROTATES inside a fixed mask, so the crests move
+     * through the visible arc while the arc itself stays put. Rotating the
+     * mask instead would move the progress, which is not what is wanted.
+     *
+     * 8s linear, anticlockwise — the values m3e uses (.wave in
+     * CircularProgressIndicatorElement).
+     */
+    animation: md-wave-travel 8s linear infinite;
+
+    /*
+     * Without transform-box, an SVG element's transform-origin resolves
+     * against its own tight bounding box, so the ring would wobble around an
+     * off-centre point. view-box makes 50% 50% the middle of the viewBox,
+     * which is the middle of the circle.
+     */
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+  }
+
+  @keyframes md-wave-travel {
+    from {
+      rotate: 360deg;
+    }
+    to {
+      rotate: 0deg;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .md-wavy-progress__active {
+      animation: none;
+    }
+  }
+
+  .md-wavy-progress__label {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-family: var(--md-sys-typescale-label-large-font);
+    font-size: var(--md-sys-typescale-label-large-size);
+    line-height: var(--md-sys-typescale-label-large-line-height);
+    font-weight: var(--md-sys-typescale-label-large-emphasized-weight);
+    letter-spacing: normal;
+    color: var(--md-sys-color-on-surface);
+  }
+}

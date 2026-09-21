@@ -1,0 +1,66 @@
+/*
+ * Typefaces.
+ *
+ * Two self-hosted variable fonts, split by script via unicode-range:
+ *
+ *   Google Sans Flex  - Latin (English)
+ *   Noto Sans Arabic  - Arabic (and the rest of the Arabic block)
+ *
+ * Because the split is done with unicode-range rather than by swapping the
+ * font stack, mixed-script text Just Works: an Arabic sentence containing a
+ * Latin product name renders each run in its own face, with no `dir` handling
+ * or per-element class needed.
+ *
+ * Self-hosted because the Google Fonts CSS API does not serve either Google
+ * Sans family - `?family=Google+Sans` answers "400: Font family not found".
+ * Both are SIL OFL 1.1; the licences sit next to the woff2 files.
+ *
+ * The woff2s stay VARIABLE - see tokens/motion.css for why that matters.
+ * Rebuild them with ./scripts/build-fonts.sh.
+ */
+
+@font-face {
+  font-family: 'Google Sans Flex';
+  src: url('../fonts/google-sans-flex-latin.woff2') format('woff2');
+  /* The full wght axis, so weight is continuously animatable - not just the
+     400/500/700 stops the type scale happens to name. */
+  font-weight: 1 1000;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
+    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Noto Sans Arabic';
+  src: url('../fonts/noto-sans-arabic.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1,
+    U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF,
+    U+FE70-FE74, U+FE76-FEFC;
+}
+
+:root {
+  /*
+   * M3 splits type into two reference typefaces: `brand` carries Display and
+   * Headline, `plain` carries Title, Body and Label. We use one family for
+   * both - Google Sans Flex is designed to cover the whole range - but the
+   * split is kept so a separate display face can be dropped in later without
+   * touching the type scale.
+   *
+   * Noto Sans Arabic sits in the same stack rather than replacing it: the
+   * unicode-range split above decides which face actually renders each run.
+   */
+  --md-ref-typeface-brand: 'Google Sans Flex', 'Noto Sans Arabic', system-ui, sans-serif;
+  --md-ref-typeface-plain: 'Google Sans Flex', 'Noto Sans Arabic', system-ui, sans-serif;
+
+  /* Named weight stops on the wght axis. The axis itself is continuous. */
+  --md-ref-typeface-weight-regular: 400;
+  --md-ref-typeface-weight-medium: 500;
+  --md-ref-typeface-weight-bold: 700;
+}
