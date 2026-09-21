@@ -2,6 +2,8 @@ import { useRef, useState } from 'react'
 import { useT } from './i18n/useT'
 import type { StringKey } from './i18n/strings'
 import { NavRail } from './components/NavRail'
+import { NavBar } from './components/NavBar'
+import { useCompact } from './components/useCompact'
 import { PageTransition } from './components/PageTransition'
 import { DESTINATIONS, UTILITIES } from './app/navigation'
 import { ProfilePage } from './features/profile/ProfilePage'
@@ -43,6 +45,9 @@ const SEED_APPLICATIONS: Application[] = []
 
 function App() {
   const t = useT()
+  const compact = useCompact()
+  /* The floating bar under 600px, the rail above it — same props either way. */
+  const Navigation = compact ? NavBar : NavRail
   const [active, setActive] = useState('applications')
 
   /*
@@ -276,8 +281,15 @@ function App() {
     .join(' · ')
 
   return (
-    <div className="bg-background text-on-surface flex min-h-svh">
-      <NavRail
+    <div
+      className={`bg-background text-on-surface app${compact ? ' app--compact' : ''}`}
+    >
+      {/*
+        A rail and a floating bar are two different M3 components, not one in
+        two skins — different anatomy, different order in the DOM. The window
+        size class picks; neither one has to know about the other.
+      */}
+      <Navigation
         destinations={destinations}
         utilities={utilities}
         activeId={active}
@@ -299,7 +311,7 @@ function App() {
         }}
       />
 
-      <main className="min-w-0 flex-1 px-10 py-11">
+      <main className="app__main">
         {/*
           The profile goes through the same cross-fade as everything else. Its
           own tab transitions are keyed separately, so switching a tab does not

@@ -41,7 +41,9 @@
 @import './components/expansion-panel.css';
 @import './components/dialog.css';
 @import './components/wavy-progress.css';
+@import './components/shell.css';
 @import './components/nav-rail.css';
+@import './components/nav-bar.css';
 @import './components/profile.css';
 @import './components/jobs.css';
 @import './components/job-detail.css';

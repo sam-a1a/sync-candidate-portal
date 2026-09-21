@@ -83,27 +83,37 @@ export function AccountPanel({
                 />
 
                 {/*
-                  The name only. The email is one line down under "How you
-                  sign in", which is the thing it actually is — printing it
-                  twice on one panel says nothing the second time.
+                  The name only. The email is one line down, beside the person
+                  icon — printing it twice on one panel says nothing the second
+                  time.
                 */}
                 <div className="account__who">
                   <h2>{name}</h2>
                 </div>
 
-                <Button variant="outlined" icon="logout" onClick={onSignOut}>
+                <Button
+                  variant="outlined"
+                  icon="logout"
+                  className="account__signout"
+                  onClick={onSignOut}
+                >
                   {t('account.signOut')}
                 </Button>
                 <IconButton
                   icon="close"
+                  className="account__close"
                   label={t('common.close')}
                   onClick={onClose}
                 />
               </header>
 
               <div className="account__columns">
+                {/*
+                  No heading. An email beside a person icon and two password
+                  fields are already "how you sign in" — a line of text saying
+                  so is one more thing to read for nothing.
+                */}
                 <section className="account__card">
-                  <h3>{t('account.howYouSignIn')}</h3>
                   <p className="account__email">
                     <Icon name="person" size={20} />
                     <span>

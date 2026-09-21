@@ -42,6 +42,18 @@
     color: var(--md-sys-color-on-surface-variant);
   }
 
+  /*
+   * Compact: the blurb goes under the title. Side by side a 390px window gives
+   * each of them half a line, and two ragged columns read as neither.
+   */
+  @media (max-width: 599px) {
+    .jobs__header,
+    .applications__header {
+      display: block;
+      margin-block-end: 18px;
+    }
+  }
+
   /* --- Filters --- */
 
   .jobs__filters {

@@ -1,0 +1,33 @@
+/*
+ * The app shell: the navigation beside the page, or above and below it.
+ *
+ * Expanded, the rail is a column in a flex row. Compact, the brand bar and the
+ * floating dock own their own placement (sticky and fixed), so the shell is
+ * just a block and the only thing left to say is how much room the page gets.
+ */
+
+@layer components {
+  .app {
+    display: flex;
+    min-block-size: 100svh;
+  }
+
+  .app__main {
+    flex: 1;
+    min-inline-size: 0;
+    padding: 44px 40px;
+  }
+
+  .app--compact {
+    display: block;
+  }
+
+  .app--compact .app__main {
+    /*
+     * Edge to edge, near enough: 16px is the compact-window margin. The bottom
+     * clears the 64px dock, its 16px inset and the gap above it, so the last
+     * row of a list can still be scrolled out from under the pill.
+     */
+    padding: 4px 16px calc(96px + env(safe-area-inset-bottom));
+  }
+}

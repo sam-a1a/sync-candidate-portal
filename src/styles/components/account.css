@@ -311,3 +311,83 @@
     margin-block-start: 26px;
   }
 }
+
+/*
+ * Compact windows: the account is a full screen, not a card floating on one.
+ *
+ * A 980px panel shrunk to 342px is a panel with nothing left to say for the
+ * shape — it keeps a rounded frame and a scrim margin that buy nothing on a
+ * phone and cost the only thing in short supply there, which is width. Full
+ * bleed gives the fields their 16px gutter and lets the sheet scroll as a page.
+ */
+@layer components {
+  @media (max-width: 599px) {
+    .account {
+      inline-size: 100vw;
+      max-inline-size: none;
+      block-size: 100svh;
+      border-radius: 0;
+      padding: 12px 16px calc(24px + env(safe-area-inset-bottom));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+
+    /*
+     * Two rows: who you are with the way out of the sheet, then signing out on
+     * its own full-width row, where it is a decision rather than a stray
+     * button squeezed against a name.
+     */
+    .account__head {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-areas:
+        'pic who close'
+        'out out out';
+      align-items: center;
+      gap: 16px 14px;
+      margin-block-end: 20px;
+    }
+
+    .account__picture,
+    .account__picture img,
+    .account__initials {
+      inline-size: 68px;
+      block-size: 68px;
+    }
+
+    .account__picture {
+      grid-area: pic;
+    }
+
+    .account__who {
+      grid-area: who;
+    }
+
+    .account__who h2 {
+      font-size: var(--md-sys-typescale-title-large-size);
+      line-height: var(--md-sys-typescale-title-large-line-height);
+    }
+
+    .account__signout {
+      grid-area: out;
+      justify-content: center;
+    }
+
+    .account__close {
+      grid-area: close;
+    }
+
+    .account__card {
+      padding: 18px 16px;
+    }
+
+    /* The sentence above the button, not beside it — there is no beside. */
+    .account__leaving {
+      display: block;
+    }
+
+    .account__leaving p {
+      margin-block-end: 14px;
+    }
+  }
+}

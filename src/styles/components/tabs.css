@@ -22,6 +22,35 @@
     background-color: var(--md-sys-color-surface-container);
   }
 
+  /*
+   * Compact: one row that scrolls, not four that wrap. Seven profile sections
+   * wrapped into a blob turn a control into a paragraph of buttons and push
+   * the fields below it off the screen; a scrolling row keeps the pill shape
+   * and the selection where the eye expects it. M3's scrollable tabs, in the
+   * shape this app already uses.
+   */
+  @media (max-width: 599px) {
+    .md-tabs {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scrollbar-width: none;
+      /* The selected tab lands where a swipe leaves it. */
+      scroll-snap-type: x proximity;
+    }
+
+    .md-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .md-tab {
+      flex: none;
+      padding-inline: 16px;
+      scroll-snap-align: center;
+    }
+  }
+
   .md-tab {
     position: relative;
     display: inline-flex;

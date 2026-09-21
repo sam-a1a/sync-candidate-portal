@@ -1,16 +1,8 @@
 import type { ReactNode } from 'react'
-import { flushSync } from 'react-dom'
 import { Icon, type IconName } from './Icon'
 import { Flag } from './Flag'
-import { useTheme } from '../theme/useTheme'
 import { useT } from '../i18n/useT'
-import { transitionTheme, type Language } from '../theme/theme'
-
-/** The two languages the app ships, and the flag each one wears. */
-const LANGUAGES: { code: Language; label: string; flag: string }[] = [
-  { code: 'en', label: 'English', flag: 'en-us' },
-  { code: 'ar', label: 'العربية', flag: 'ar' },
-]
+import { initials, useNavControls } from './navControls'
 
 export interface RailDestination {
   id: string
@@ -33,15 +25,6 @@ interface NavRailProps {
    * to keep in sync and one more item in a list that should stay short.
    */
   account: { id: string; name: string; avatarUrl?: string }
-}
-
-function initials(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase() ?? '')
-    .join('')
 }
 
 function NavRailItem({
@@ -112,36 +95,9 @@ export function NavRail({
   utilities,
   account,
 }: NavRailProps) {
-  const { resolvedTheme, setMode, language, setLanguage } = useTheme()
   const t = useT()
-
-  /*
-   * A plain two-state switch. The provider still resolves `system` for a first
-   * visit, so the app opens in whatever the OS prefers - but once someone has
-   * an opinion, "follow the system" is not a third thing they want to click
-   * past to get back to light. The button shows the theme it will switch TO.
-   */
-  const nextTheme = resolvedTheme === 'dark' ? 'light' : 'dark'
-
-  const switchTheme = () => {
-    // flushSync: the view transition snapshots the DOM as soon as this
-    // returns, so the attribute has to be on <html> by then.
-    transitionTheme(() => flushSync(() => setMode(nextTheme)))
-  }
-
-  /*
-   * Language rides the same cross-fade as the theme. Switching writing
-   * direction repaints every surface at once — the rail changes side, every
-   * logical property flips, the typeface changes — which is exactly the flash
-   * a view transition exists to smooth over.
-   */
-  const switchLanguage = (next: Language) => {
-    if (next === language) return
-    transitionTheme(() => flushSync(() => setLanguage(next)))
-  }
-
-  const nextLanguage =
-    LANGUAGES.find((entry) => entry.code !== language) ?? LANGUAGES[0]
+  const { nextTheme, switchTheme, nextLanguage, switchLanguage } =
+    useNavControls()
 
   return (
     <nav className="nav-rail" aria-label="Main navigation">
@@ -222,7 +178,7 @@ export function NavRail({
         <button
           type="button"
           className="nav-rail__utility"
-          onClick={() => switchLanguage(nextLanguage.code)}
+          onClick={switchLanguage}
           title={t('rail.toLanguage', { language: nextLanguage.label })}
           aria-label={t('rail.toLanguage', { language: nextLanguage.label })}
         >

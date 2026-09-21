@@ -300,6 +300,52 @@
     background-color: var(--md-sys-color-primary);
   }
 
+  /*
+   * Compact: the time drops under the message instead of standing beside it.
+   *
+   * On one row the mark, the time and the dot take ~120px of a 358px line, and
+   * what is left breaks "Field Coordinator at Norwegian Refugee Council" into
+   * one word per line. The dot stays on the first row, where it is the thing
+   * you scan the column for.
+   */
+  @media (max-width: 599px) {
+    .notification {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-areas:
+        'mark text dot'
+        'mark when when';
+      align-items: start;
+      column-gap: 12px;
+      row-gap: 4px;
+      padding: 12px 14px;
+    }
+
+    .notification__mark {
+      grid-area: mark;
+      inline-size: 40px;
+      block-size: 40px;
+    }
+
+    .notification__text {
+      grid-area: text;
+    }
+
+    /* The wrapper steps out of the way so its two children can be placed. */
+    .notification__end {
+      display: contents;
+    }
+
+    .notification__when {
+      grid-area: when;
+    }
+
+    .notification__dot {
+      grid-area: dot;
+      margin-block-start: 7px;
+    }
+  }
+
   /* --- Nothing yet (draft B) --- */
 
   .notifications__empty {

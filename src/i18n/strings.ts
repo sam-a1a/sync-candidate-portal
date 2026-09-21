@@ -173,7 +173,6 @@ export const EN = {
   /* --- The account panel --- */
   'account.title': 'Your account',
   'account.signOut': 'Sign out',
-  'account.howYouSignIn': 'How you sign in',
   'account.email': 'Email',
   'account.currentPassword': 'Current password',
   'account.newPassword': 'New password',
@@ -599,7 +598,6 @@ export const AR: Record<StringKey, string> = {
   /* --- The account panel --- */
   'account.title': 'حسابك',
   'account.signOut': 'تسجيل الخروج',
-  'account.howYouSignIn': 'كيف تسجّل الدخول',
   'account.email': 'البريد الإلكتروني',
   'account.currentPassword': 'كلمة المرور الحالية',
   'account.newPassword': 'كلمة مرور جديدة',

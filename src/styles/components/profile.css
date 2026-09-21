@@ -497,6 +497,18 @@
       align-items: stretch;
     }
   }
+
+  /*
+   * Compact: one field per row. Two columns leave ~167px each, and the phone
+   * row spends 110 of that on the dialling code before the number starts —
+   * so the number was clipped rather than narrow.
+   */
+  @media (max-width: 599px) {
+    .profile__grid {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 28px;
+    }
+  }
 }
 
 @layer components {

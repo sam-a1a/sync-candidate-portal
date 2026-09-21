@@ -1,0 +1,357 @@
+/*
+ * Material 3 Expressive floating toolbar — the compact-window navigation.
+ *
+ * Only ever rendered under 600px (see useCompact), so nothing here is behind a
+ * media query: the shell picks the component, and the component owns its
+ * layout. That keeps one breakpoint in one place instead of repeating it in
+ * every rule.
+ *
+ * Anatomy:
+ *
+ *   .nav-bar__top          sticky brand bar: logo, then the three switches
+ *   .nav-bar__dock         fixed at the bottom: the lead circle + the pill
+ *     .nav-bar__lead       notifications, on its own circle
+ *     .nav-bar             the pill
+ *       .nav-bar__item     icon only; the indicator is the selected state
+ *
+ * Everything is written with logical properties, so it mirrors for Arabic with
+ * no RTL-specific rules.
+ */
+
+@layer components {
+  /* --- The brand bar --- */
+
+  .nav-bar__top {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 5;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    block-size: 56px;
+    padding-inline: 16px 8px;
+    box-sizing: border-box;
+
+    /*
+     * Opaque, not translucent: content scrolls under it, and a blur here would
+     * be one more compositing layer on the cheapest device we target.
+     */
+    background-color: var(--md-sys-color-background);
+  }
+
+  .nav-bar__logo {
+    inline-size: 30px;
+    block-size: auto;
+    flex: none;
+    margin-inline-end: auto;
+  }
+
+  .nav-bar__switches {
+    display: flex;
+    align-items: center;
+    flex: none;
+  }
+
+  /*
+   * The same control as the rail's, at touch size. No container fill: three
+   * filled circles in a row at the top of every screen would read as a
+   * toolbar of primary actions, which they are not.
+   */
+  .nav-bar__switch {
+    position: relative;
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    inline-size: 48px;
+    block-size: 48px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--md-sys-shape-corner-full);
+    background: none;
+    color: var(--md-sys-color-on-surface-variant);
+    cursor: pointer;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+
+    transition-property: color, border-radius;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-default-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-default-effects-duration);
+  }
+
+  .nav-bar__switch::after {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border-radius: inherit;
+    background-color: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    transition-property: opacity;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-fast-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-fast-effects-duration);
+  }
+
+  .nav-bar__switch:hover::after {
+    opacity: var(--md-sys-state-hover-state-layer-opacity);
+  }
+
+  .nav-bar__switch:focus-visible::after {
+    opacity: var(--md-sys-state-focus-state-layer-opacity);
+  }
+
+  .nav-bar__switch:active::after {
+    opacity: var(--md-sys-state-pressed-state-layer-opacity);
+  }
+
+  .nav-bar__switch .md-icon,
+  .nav-bar__switch .md-flag {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* The account carries the person, so it wears the person, not an icon. */
+  .nav-bar__switch--account .nav-bar__initials,
+  .nav-bar__switch--account .nav-bar__avatar {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    inline-size: 34px;
+    block-size: 34px;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-tertiary-container);
+    color: var(--md-sys-color-on-tertiary-container);
+    object-fit: cover;
+
+    font-family: var(--md-sys-typescale-label-medium-font);
+    font-size: var(--md-sys-typescale-label-medium-size);
+    font-weight: var(--md-sys-typescale-label-medium-emphasized-weight);
+    line-height: 1;
+    letter-spacing: normal;
+  }
+
+  .nav-bar__switch--account[aria-current='page'] .nav-bar__initials {
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+  }
+
+  /* --- The dock --- */
+
+  .nav-bar__dock {
+    position: fixed;
+    z-index: 20;
+    inset-inline: 16px;
+    /* Clear of the home indicator on a gesture-nav phone. */
+    inset-block-end: max(16px, env(safe-area-inset-bottom));
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    block-size: 64px;
+    pointer-events: none;
+  }
+
+  .nav-bar__dock > * {
+    pointer-events: auto;
+  }
+
+  .nav-bar__lead,
+  .nav-bar {
+    block-size: 64px;
+    box-sizing: border-box;
+    border-radius: var(--md-sys-shape-corner-full);
+
+    /*
+     * A floating toolbar is level 3 — it sits over content that scrolls under
+     * it, so it needs the shadow as well as the tonal step to stay legible
+     * against whatever passes beneath.
+     */
+    background-color: var(--md-sys-color-surface-container-high);
+    box-shadow: var(--md-sys-elevation-shadow-level3);
+  }
+
+  .nav-bar__lead {
+    position: relative;
+    flex: none;
+    inline-size: 64px;
+    display: grid;
+    place-items: center;
+    color: var(--md-sys-color-on-surface-variant);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+
+    transition-property: background-color, color, border-radius;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-default-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-default-effects-duration);
+  }
+
+  .nav-bar__lead[aria-current='page'] {
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+    --md-icon-fill: 1;
+  }
+
+  /* Shape morph on press, the same move every round control here makes. */
+  .nav-bar__lead:active {
+    border-radius: var(--md-sys-shape-corner-large);
+  }
+
+  .nav-bar {
+    flex-grow: 1;
+    min-inline-size: 0;
+    padding-inline: 6px;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-bar__group {
+    display: flex;
+    align-items: center;
+    inline-size: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-bar__group > li {
+    flex: 1 1 0;
+    min-inline-size: 0;
+  }
+
+  /* --- One destination --- */
+
+  .nav-bar__item {
+    position: relative;
+    display: grid;
+    place-items: center;
+
+    inline-size: 100%;
+    block-size: 52px;
+    border: 0;
+    background: none;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nav-bar__indicator {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+
+    /*
+     * Symmetric insets centre the pill without a transform, which keeps it
+     * correct in RTL and leaves `scale` free for the selection animation.
+     */
+    inset-inline: calc(50% - 28px);
+    inset-block: 10px;
+
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-secondary-container);
+
+    scale: 0 1;
+    opacity: 0;
+
+    transition-property: scale, opacity;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-fast-spatial);
+    transition-duration: var(--md-sys-motion-spring-expressive-fast-spatial-duration);
+  }
+
+  .nav-bar__item[aria-current='page'] .nav-bar__indicator {
+    scale: 1 1;
+    opacity: 1;
+  }
+
+  .nav-bar__item[aria-current='page']:active .nav-bar__indicator {
+    scale: 0.94 0.9;
+  }
+
+  .nav-bar__icon-wrap {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    inline-size: 56px;
+    block-size: 32px;
+    border-radius: var(--md-sys-shape-corner-full);
+    color: var(--md-sys-color-on-surface-variant);
+
+    transition-property: color;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-default-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-default-effects-duration);
+  }
+
+  .nav-bar__item .md-icon {
+    --md-icon-size: 24px;
+    /*
+     * Selected fills the icon by driving the FILL axis rather than swapping
+     * glyphs. With no label under it, that fill is most of what says "here".
+     */
+    transition-property: --md-icon-fill, --md-icon-weight;
+    transition-timing-function: var(--md-sys-motion-spring-expressive-default-effects);
+    transition-duration: var(--md-sys-motion-spring-expressive-default-effects-duration);
+  }
+
+  .nav-bar__item[aria-current='page'] {
+    --md-icon-fill: 1;
+    --md-icon-weight: 500;
+  }
+
+  .nav-bar__item[aria-current='page'] .nav-bar__icon-wrap {
+    color: var(--md-sys-color-on-secondary-container);
+  }
+
+  .nav-bar__item:focus-visible {
+    outline: none;
+  }
+
+  .nav-bar__item:focus-visible .nav-bar__indicator {
+    outline: 3px solid var(--md-sys-color-primary);
+    outline-offset: 2px;
+    opacity: 1;
+    scale: 1 1;
+  }
+
+  /* --- Badge --- */
+
+  .nav-bar__badge {
+    position: absolute;
+    z-index: 2;
+    inset-block-start: -2px;
+    inset-inline-start: calc(50% + 4px);
+
+    min-inline-size: 16px;
+    block-size: 16px;
+    padding-inline: 4px;
+    box-sizing: border-box;
+
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-sys-color-error);
+    color: var(--md-sys-color-on-error);
+
+    font-family: var(--md-sys-typescale-label-small-font);
+    font-size: var(--md-sys-typescale-label-small-size);
+    font-weight: var(--md-sys-typescale-label-small-emphasized-weight);
+    line-height: 16px;
+    letter-spacing: normal;
+    text-align: center;
+  }
+
+  .nav-bar__lead .nav-bar__badge {
+    inset-block-start: 14px;
+    inset-inline-start: calc(50% + 2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-bar__indicator {
+      scale: 1 1;
+    }
+
+    .nav-bar__item:not([aria-current='page']) .nav-bar__indicator {
+      opacity: 0;
+    }
+  }
+}
